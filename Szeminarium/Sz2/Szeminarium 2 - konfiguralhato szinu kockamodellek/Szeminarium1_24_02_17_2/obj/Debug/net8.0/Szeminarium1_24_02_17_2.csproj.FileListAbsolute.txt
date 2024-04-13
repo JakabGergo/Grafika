@@ -46,3 +46,12 @@ D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szemina
 D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\obj\Debug\net8.0\Szeminarium1_24_02_17_2.pdb
 D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\obj\Debug\net8.0\Szeminarium1_24_02_17_2.genruntimeconfig.cache
 D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\obj\Debug\net8.0\ref\Szeminarium1_24_02_17_2.dll
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\obj\Debug\net8.0\Szeminarium1_24_02_17_2.sourcelink.json
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\bin\Debug\net8.0\ImGui.NET.dll
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\bin\Debug\net8.0\Silk.NET.Input.Extensions.dll
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\bin\Debug\net8.0\Silk.NET.OpenGL.Extensions.ImGui.dll
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\bin\Debug\net8.0\runtimes\linux-x64\native\libcimgui.so
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\bin\Debug\net8.0\runtimes\osx\native\libcimgui.dylib
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\bin\Debug\net8.0\runtimes\win-arm64\native\cimgui.dll
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\bin\Debug\net8.0\runtimes\win-x64\native\cimgui.dll
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz2\Szeminarium 2 - konfiguralhato szinu kockamodellek\Szeminarium1_24_02_17_2\bin\Debug\net8.0\runtimes\win-x86\native\cimgui.dll

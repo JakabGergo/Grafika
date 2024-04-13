@@ -8,10 +8,51 @@
     ".NETCoreApp,Version=v8.0": {
       "Szeminarium1_24_02_17_2/1.0.0": {
         "dependencies": {
-          "Silk.NET": "2.20.0"
+          "Silk.NET": "2.20.0",
+          "Silk.NET.OpenGL.Extensions.ImGui": "2.20.0"
         },
         "runtime": {
           "Szeminarium1_24_02_17_2.dll": {}
+        }
+      },
+      "ImGui.NET/1.89.9.3": {
+        "dependencies": {
+          "System.Buffers": "4.5.1",
+          "System.Numerics.Vectors": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/ImGui.NET.dll": {
+            "assemblyVersion": "1.89.9.3",
+            "fileVersion": "1.89.9.3"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/libcimgui.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx/native/libcimgui.dylib": {
+            "rid": "osx",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm64/native/cimgui.dll": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/cimgui.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/cimgui.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
         }
       },
       "Microsoft.CSharp/4.7.0": {},
@@ -93,6 +134,17 @@
           }
         }
       },
+      "Silk.NET.Input.Extensions/2.20.0": {
+        "dependencies": {
+          "Silk.NET.Input.Common": "2.20.0"
+        },
+        "runtime": {
+          "lib/net5.0/Silk.NET.Input.Extensions.dll": {
+            "assemblyVersion": "2.20.0.0",
+            "fileVersion": "2.20.0.0"
+          }
+        }
+      },
       "Silk.NET.Input.Glfw/2.20.0": {
         "dependencies": {
           "Silk.NET.Input.Common": "2.20.0",
@@ -145,6 +197,21 @@
         },
         "runtime": {
           "lib/net5.0/Silk.NET.OpenGL.dll": {
+            "assemblyVersion": "2.20.0.0",
+            "fileVersion": "2.20.0.0"
+          }
+        }
+      },
+      "Silk.NET.OpenGL.Extensions.ImGui/2.20.0": {
+        "dependencies": {
+          "ImGui.NET": "1.89.9.3",
+          "Silk.NET.Input.Common": "2.20.0",
+          "Silk.NET.Input.Extensions": "2.20.0",
+          "Silk.NET.OpenGL": "2.20.0",
+          "Silk.NET.Windowing.Common": "2.20.0"
+        },
+        "runtime": {
+          "lib/net5.0/Silk.NET.OpenGL.Extensions.ImGui.dll": {
             "assemblyVersion": "2.20.0.0",
             "fileVersion": "2.20.0.0"
           }
@@ -334,6 +401,13 @@
       "serviceable": false,
       "sha512": ""
     },
+    "ImGui.NET/1.89.9.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KDU6oYAju/c1JR5gP23Ea+FUR62J3AvoDB5zlKHCALi3u5sGBmdFcSOE6bg8DJeGgzluWOS5IO/MhJtrGdkNKw==",
+      "path": "imgui.net/1.89.9.3",
+      "hashPath": "imgui.net.1.89.9.3.nupkg.sha512"
+    },
     "Microsoft.CSharp/4.7.0": {
       "type": "package",
       "serviceable": true,
@@ -390,6 +464,13 @@
       "path": "silk.net.input.common/2.20.0",
       "hashPath": "silk.net.input.common.2.20.0.nupkg.sha512"
     },
+    "Silk.NET.Input.Extensions/2.20.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-H7EoLbxB02wNoTxSs5dw85yjR7TC2sacVgnNicBQ7iYLo+g4rImV6baPAoD50k4KftnLF98+gVgx1SeFRHyiuw==",
+      "path": "silk.net.input.extensions/2.20.0",
+      "hashPath": "silk.net.input.extensions.2.20.0.nupkg.sha512"
+    },
     "Silk.NET.Input.Glfw/2.20.0": {
       "type": "package",
       "serviceable": true,
@@ -424,6 +505,13 @@
       "sha512": "sha512-VMeNmTCBmMGGnVu3hvc8QvQdUqU4W98ca5p75lLlxJF4YvJqNIPPVAbPWs65oAdoi5FT4UoOl9CS3i89VTPxEA==",
       "path": "silk.net.opengl/2.20.0",
       "hashPath": "silk.net.opengl.2.20.0.nupkg.sha512"
+    },
+    "Silk.NET.OpenGL.Extensions.ImGui/2.20.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nK7MUdKlYJv2vJqwvHAe3aaAkioLOxaTjg3tfF9NDbrXrD+cyRsOd/LEuGqbXKJG8l5zP+CAUj71jIifSbBoiA==",
+      "path": "silk.net.opengl.extensions.imgui/2.20.0",
+      "hashPath": "silk.net.opengl.extensions.imgui.2.20.0.nupkg.sha512"
     },
     "Silk.NET.SDL/2.20.0": {
       "type": "package",

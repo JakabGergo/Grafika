@@ -1,7 +1,10 @@
-﻿using Silk.NET.Input;
+﻿using ImGuiNET;
+using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
+using Silk.NET.OpenGL.Extensions.ImGui;
 using Silk.NET.Windowing;
+
 
 namespace Szeminarium1_24_02_17_2
 {
@@ -30,6 +33,8 @@ namespace Szeminarium1_24_02_17_2
         private static int rlepes = 0;
 
         private static IWindow window;
+        private static IInputContext inputContext;
+        private static ImGuiController controller;
 
         private static GL Gl;
 
@@ -75,7 +80,7 @@ namespace Szeminarium1_24_02_17_2
         {
             WindowOptions windowOptions = WindowOptions.Default;
             windowOptions.Title = "2 szeminárium";
-            windowOptions.Size = new Vector2D<int>(500, 500);
+            windowOptions.Size = new Vector2D<int>(750, 750);
 
             // on some systems there is no depth buffer by default, so we need to make sure one is created
             windowOptions.PreferredDepthBufferBits = 24;
@@ -92,16 +97,24 @@ namespace Szeminarium1_24_02_17_2
 
         private static void Window_Load()
         {
-            //Console.WriteLine("Load");
-
             // set up input handling
-            IInputContext inputContext = window.CreateInput();
+            inputContext = window.CreateInput();
             foreach (var keyboard in inputContext.Keyboards)
             {
                 keyboard.KeyDown += Keyboard_KeyDown;
             }
 
             Gl = window.CreateOpenGL();
+
+            controller = new ImGuiController(Gl, window, inputContext);
+
+            // Handle resizes
+            window.FramebufferResize += s =>
+            {
+                // Adjust the viewport to the new window size
+                Gl.Viewport(s);
+            };
+
             Gl.ClearColor(System.Drawing.Color.White);
 
             SetUpObjects();
@@ -243,6 +256,8 @@ namespace Szeminarium1_24_02_17_2
             Keyboard_KeyPressed(keyboard);
 
             cubeArrangementModel.AdvanceTime(deltaTime);
+
+            controller.Update((float)deltaTime);
         }
 
         private static unsafe void Window_Render(double deltaTime)
@@ -305,6 +320,13 @@ namespace Szeminarium1_24_02_17_2
             }
             if (kirakva) { cubeArrangementModel.AnimationEnabeld = true; }
             else { cubeArrangementModel.AnimationEnabeld = false; }
+
+            ImGuiNET.ImGui.ShowDemoWindow();
+            //ImGuiNET.ImGui.Begin("Lighting properties",
+              //  ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+            //ImGuiNET.ImGui.End();
+
+            controller.Render();
         }
 
         private static unsafe void DrawRubicCubeElement(RubicCubeElement cubeElement)

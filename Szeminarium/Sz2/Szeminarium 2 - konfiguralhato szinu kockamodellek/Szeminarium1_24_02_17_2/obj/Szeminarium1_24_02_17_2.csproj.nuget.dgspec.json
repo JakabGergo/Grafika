@@ -48,6 +48,10 @@
             "Silk.NET": {
               "target": "Package",
               "version": "[2.20.0, )"
+            },
+            "Silk.NET.OpenGL.Extensions.ImGui": {
+              "target": "Package",
+              "version": "[2.20.0, )"
             }
           },
           "imports": [
