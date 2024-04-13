@@ -38,6 +38,7 @@ namespace Szeminarium1_24_02_17_2
         private static IInputContext inputContext;
         private static ImGuiController controller;
 
+        // ujjonnan athozott parameter
         private static float Shininess = 50;
 
         private static GL Gl;
@@ -307,6 +308,7 @@ namespace Szeminarium1_24_02_17_2
         {
             // ImGuiNET.ImGui.ShowDemoWindow();
             ImGuiNET.ImGui.Begin("Lighting properties", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+            //meg kell 2 ilyen es a pong arnyalas
             ImGuiNET.ImGui.SliderFloat("Shininess", ref Shininess, 1, 200);
             if (!forgat && rlepes == 0)
             {
