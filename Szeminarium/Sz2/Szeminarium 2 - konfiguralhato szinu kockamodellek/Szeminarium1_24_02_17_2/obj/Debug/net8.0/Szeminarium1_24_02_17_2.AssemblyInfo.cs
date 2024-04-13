@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Szeminarium1_24_02_17_2")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5b9bc12936c91d113c99325ab34296a31c28e897")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62f9ac289ec5e2e49087195fe0cf97d868b8ef8a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Szeminarium1_24_02_17_2")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Szeminarium1_24_02_17_2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

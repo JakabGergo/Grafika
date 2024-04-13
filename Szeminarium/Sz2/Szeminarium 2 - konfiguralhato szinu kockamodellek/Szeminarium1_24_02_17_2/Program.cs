@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System.Numerics;
+using ImGuiNET;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -13,10 +14,15 @@ namespace Szeminarium1_24_02_17_2
         private static CameraDescriptor cameraDescriptor = new();
 
         private static CubeArrangementModel cubeArrangementModel = new();
+        private static List<RubicCubeElement> rcElements;
 
         private const double AngleChangeStepSize = Math.PI / 180 * 3;
 
+        //random generalashoz
+        private static Random random = new Random();
+        private static int rlepes = 0;
         private static List<(int, float)> randomLepesek = new();
+        
         private static (int, float) lep = new();
         
         //pontositunk a forgatasok utan
@@ -28,19 +34,15 @@ namespace Szeminarium1_24_02_17_2
         private static float segedSzog = 0;
         private static float segedSzog2 = 0;
 
-        //random generalashoz
-        private static Random random = new Random();
-        private static int rlepes = 0;
-
         private static IWindow window;
         private static IInputContext inputContext;
         private static ImGuiController controller;
 
+        private static float Shininess = 50;
+
         private static GL Gl;
 
         private static uint program;
-
-        private static List<RubicCubeElement> rcElements;
 
         private const string ModelMatrixVariableName = "uModel";
         private const string ViewMatrixVariableName = "uView";
@@ -284,14 +286,125 @@ namespace Szeminarium1_24_02_17_2
             }
 
             //ha nem ment le a forgatas
+            ForgatasiSzogFrissitese(deltaTime, targetRotationAngle, rotationSpeed);
+
+            bool kirakva = true;
+            foreach (var cubeElement in rcElements)
+            {
+                kirakva &= cubeElement.helyenVan();
+                DrawRubicCubeElement(cubeElement);
+            }
+
+            if (kirakva) { cubeArrangementModel.AnimationEnabeld = true; }
+            else { cubeArrangementModel.AnimationEnabeld = false; }
+
+            GombokKirajzolasa();
+
+            controller.Render();
+        }
+
+        private static unsafe void GombokKirajzolasa()
+        {
+            // ImGuiNET.ImGui.ShowDemoWindow();
+            ImGuiNET.ImGui.Begin("Lighting properties", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+            ImGuiNET.ImGui.SliderFloat("Shininess", ref Shininess, 1, 200);
+            if (!forgat && rlepes == 0)
+            {
+                ImGuiNET.ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1.0f, 0.5f, 0.0f, 1.0f));
+                if (ImGui.Button("Narancs <-"))
+                {
+                    lep = (1, float.Pi / 2);
+                    forgat = true;
+                };
+                if (ImGui.Button("Narancs ->"))
+                {
+                    lep = (1, -float.Pi / 2);
+                    forgat = true;
+                }
+                ImGui.PopStyleColor();
+
+                ImGuiNET.ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+                if (ImGui.Button("Piros ->"))
+                {
+                    lep = (2, float.Pi / 2);
+                    forgat = true;
+                }
+                if (ImGui.Button("Piros <-"))
+                {
+                    lep = (2, -float.Pi / 2);
+                    forgat = true;
+                }
+                ImGui.PopStyleColor();
+                
+                ImGuiNET.ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+                ImGuiNET.ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+                if (ImGui.Button("Zold <-"))
+                {
+                    lep = (3, float.Pi / 2);
+                    forgat = true;
+                }
+                if (ImGui.Button("Zold ->"))
+                {
+                    lep = (3, -float.Pi / 2);
+                    forgat = true;
+                }
+                ImGui.PopStyleColor();
+                
+                ImGuiNET.ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+                if (ImGui.Button("Kek ->"))
+                {
+                    lep = (4, float.Pi / 2);
+                    forgat = true;
+                }
+                if (ImGui.Button("Kek <-"))
+                {
+                    lep = (4, -float.Pi / 2);
+                    forgat = true;
+                }
+                ImGui.PopStyleColor();
+                
+                ImGuiNET.ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+                ImGuiNET.ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+                if (ImGui.Button("Sarga ->"))
+                {
+                    lep = (5, float.Pi / 2);
+                    forgat = true;
+                }
+                if (ImGui.Button("Sarga <-"))
+                {
+                    lep = (5, -float.Pi / 2);
+                    forgat = true;
+                }
+                ImGui.PopStyleColor();
+                
+                ImGuiNET.ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+                ImGuiNET.ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+                if (ImGui.Button("Feher ->"))
+                {
+                    lep = (6, float.Pi / 2);
+                    forgat = true;
+                }
+                if (ImGui.Button("Feher <-"))
+                {
+                    lep = (6, -float.Pi / 2);
+                    forgat = true;
+                }
+            }
+            ImGui.PopStyleColor();
+            ImGuiNET.ImGui.End();
+        }
+
+        private static unsafe void ForgatasiSzogFrissitese(double deltaTime, float targetRotationAngle, float rotationSpeed)
+        {
             if (forgat)
             {
                 //vege forgatasnak
                 if (Math.Abs(segedSzog) >= Math.Abs(targetRotationAngle))
                 {
-                    if (randomLepesek.Count != 0) {
+                    if (randomLepesek.Count != 0)
+                    {
                         rlepes++;
-                        if(rlepes == 30)
+                        if (rlepes == 30)
                         {
                             rlepes = 0;
                             randomLepesek = new();
@@ -311,22 +424,6 @@ namespace Szeminarium1_24_02_17_2
                     }
                 }
             }
-
-            bool kirakva = true;
-            foreach (var cubeElement in rcElements)
-            {
-                kirakva &= cubeElement.helyenVan(); 
-                DrawRubicCubeElement(cubeElement);
-            }
-            if (kirakva) { cubeArrangementModel.AnimationEnabeld = true; }
-            else { cubeArrangementModel.AnimationEnabeld = false; }
-
-            ImGuiNET.ImGui.ShowDemoWindow();
-            //ImGuiNET.ImGui.Begin("Lighting properties",
-              //  ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
-            //ImGuiNET.ImGui.End();
-
-            controller.Render();
         }
 
         private static unsafe void DrawRubicCubeElement(RubicCubeElement cubeElement)
@@ -413,7 +510,7 @@ namespace Szeminarium1_24_02_17_2
             float[] zold = [0.0f, 1.0f, 0.0f, 1.0f];  //zold
             float[] narancs = [1.0f, 0.5f, 0.0f, 1.0f];  //narancs
             float[] sarga = [1.0f, 1.0f, 0.0f, 1.0f];  //sarga
-            float[] kek = [0.0f, 0.0f, 1.0f, 0.0f];  //kek
+            float[] kek = [0.0f, 0.0f, 1.0f, 1.0f];  //kek
             float[] piros = [1.0f, 0.0f, 0.0f, 1.0f]; //piros
             float[] fekete = [0.0f, 0.0f, 0.0f, 1.0f]; //fekete
 
