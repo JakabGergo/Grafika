@@ -16,7 +16,7 @@ namespace Szeminarium1_24_02_17_2
         private static CubeArrangementModel cubeArrangementModel = new();
         private static List<RubicCubeElement> rcElements;
 
-        private const double AngleChangeStepSize = Math.PI / 180 * 3;
+        private const double AngleChangeStepSize = Math.PI / 180 * 2;
 
         //random generalashoz
         private static Random random = new Random();
