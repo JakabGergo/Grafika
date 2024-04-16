@@ -104,7 +104,7 @@ namespace Szeminarium1_24_02_17_2
 
         void main()
         {
-            float ambientStrength = 0.2;
+            //float ambientStrength = 0.2;
             vec3 ambient = ambientStrength * lightColor;
 
             float diffuseStrength = 0.3;
@@ -267,6 +267,8 @@ namespace Szeminarium1_24_02_17_2
             SetViewerPosition();
             SetShininess();
 
+            SetAmbientStrength();
+
             DrawPulsingCenterCube();
 
             DrawRevolvingCube();
@@ -287,6 +289,19 @@ namespace Szeminarium1_24_02_17_2
 
 
             controller.Render();
+        }
+
+        private static unsafe void SetAmbientStrength()
+        {
+            int location = Gl.GetUniformLocation(program, ambientStrengthVariableName);
+
+            if (location == -1)
+            {
+                throw new Exception($"{ambientStrengthVariableName} uniform not found on shader.");
+            }
+
+            Gl.Uniform3(location, ambientStrength.X, ambientStrength.Y, ambientStrength.Z);
+            CheckError();
         }
 
         private static unsafe void SetLightColor()
