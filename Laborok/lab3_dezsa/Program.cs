@@ -27,6 +27,7 @@ namespace lab3_dezsa
         private static uint program;
 
         private static Dezsa dezsa;
+        private static Dezsa dezsa2;
         private static float d = (float)(1 / (2 * Math.Tan(Math.PI / 18)));
 
         //anyag tulajdonsag
@@ -245,7 +246,11 @@ namespace lab3_dezsa
             {
                 DrawDezsa((float)(2 * i * (Math.PI / 18)));
             }
-            
+            for (int i = 0; i < 18; i++)
+            {
+                DrawDezsa2((float)(2 * i * (Math.PI / 18)));
+            }
+
 
             //ImGuiNET.ImGui.ShowDemoWindow();
             ImGuiNET.ImGui.Begin("Lighting properties",
@@ -322,6 +327,18 @@ namespace lab3_dezsa
             Gl.BindVertexArray(0);
         }
 
+        private static unsafe void DrawDezsa2(float forgatasiSzog)
+        {
+            Matrix4X4<float> roty = Matrix4X4.CreateRotationY(forgatasiSzog);
+            Matrix4X4<float> trans = Matrix4X4.CreateTranslation(0, 2, d); // pozicio valtozik
+
+            var modelMatrix = trans * roty;
+            SetModelMatrix(modelMatrix);
+            Gl.BindVertexArray(dezsa.Vao);
+            Gl.DrawElements(GLEnum.Triangles, dezsa.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+        }
+
         private static unsafe void SetModelMatrix(Matrix4X4<float> modelMatrix)
         {
             int location = Gl.GetUniformLocation(program, ModelMatrixVariableName);
@@ -355,11 +372,13 @@ namespace lab3_dezsa
         private static unsafe void SetUpObjects()
         {
             dezsa = Dezsa.CreateDezsa(Gl);
+            dezsa2 = Dezsa.CreateDezsa2(Gl);
         }
 
         private static void Window_Closing()
         {
             dezsa.ReleaseDezsa();
+            dezsa2.ReleaseDezsa();
         }
 
         private static unsafe void SetProjectionMatrix()
