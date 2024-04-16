@@ -34,9 +34,9 @@ namespace Szeminarium1_24_02_17_2
             Gl.BindVertexArray(vao);
             float[] vertexArray = new float[] {
                 0.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f,
-                1.0f, 2.0f, 0.0f,
-                0.0f, 2.0f, 0.0f,
+                0.5f, 0.0f, 0.0f,
+                0.5f, 1.0f, 0.0f,
+                0.0f, 1.0f, 0.0f,
             };
             float[] colorArray = new float[] {
                 1.0f, 0.0f, 0.0f, 1.0f,

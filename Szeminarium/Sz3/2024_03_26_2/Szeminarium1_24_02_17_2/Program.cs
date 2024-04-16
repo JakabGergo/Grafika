@@ -261,9 +261,13 @@ namespace Szeminarium1_24_02_17_2
             SetViewerPosition();
             SetShininess();
 
+            DrawDezsa();
+
             DrawPulsingCenterCube();
 
-            DrawRevolvingCube();
+            //DrawRevolvingCube();
+
+            //DrawDezsa();
 
             //ImGuiNET.ImGui.ShowDemoWindow();
             ImGuiNET.ImGui.Begin("Lighting properties",
@@ -356,6 +360,13 @@ namespace Szeminarium1_24_02_17_2
             Gl.BindVertexArray(0);
         }
 
+        private static unsafe void DrawDezsa()
+        {
+            Gl.BindVertexArray(dezsa.Vao);
+            Gl.DrawElements(GLEnum.Triangles, dezsa.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+        }
+
         private static unsafe void SetModelMatrix(Matrix4X4<float> modelMatrix)
         {
             int location = Gl.GetUniformLocation(program, ModelMatrixVariableName);
@@ -400,13 +411,13 @@ namespace Szeminarium1_24_02_17_2
             glCubeRotating = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face1Color, face1Color, face1Color, face1Color, face1Color);
 
             dezsa = Dezsa.CreateDezsa(Gl);
-
         }
 
         private static void Window_Closing()
         {
             glCubeCentered.ReleaseGlCube();
             glCubeRotating.ReleaseGlCube();
+            dezsa.ReleaseDezsa();
         }
 
         private static unsafe void SetProjectionMatrix()
