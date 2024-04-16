@@ -37,6 +37,7 @@ namespace Szeminarium1_24_02_17_2
         private static Vector3D<float> diffuseStrength = new Vector3D<float>(0.5f, 0.5f, 0.5f);
         private static string[] szinek = { "Piros", "Zold", "Kek", "Lila", "Aqua", "Sarga" };
         private static int kivalasztottSzin = 0;
+        private static int elozoSzin = 0;
 
         private const string ModelMatrixVariableName = "uModel";
         private const string NormalMatrixVariableName = "uNormal";
@@ -273,9 +274,7 @@ namespace Szeminarium1_24_02_17_2
             SetSpecularStrength();
             SetDiffuseStrength();
 
-            DrawPulsingCenterCube();
-
-            DrawRevolvingCube();
+      
 
             //ImGuiNET.ImGui.ShowDemoWindow();
             ImGuiNET.ImGui.Begin("Lighting properties", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
@@ -291,6 +290,17 @@ namespace Szeminarium1_24_02_17_2
             ImGuiNET.ImGui.SliderFloat("diffuseS.-B", ref diffuseStrength.Z, 0, 1);
             ImGuiNET.ImGui.Combo("Teto szine", ref kivalasztottSzin, szinek, 6);
             ImGuiNET.ImGui.End();
+
+
+            if(kivalasztottSzin != elozoSzin)
+            {
+                Window_Closing();
+                SetUpObjects();
+                elozoSzin = kivalasztottSzin;
+            }
+
+            DrawPulsingCenterCube();
+            DrawRevolvingCube();
 
             controller.Render();
         }
@@ -464,8 +474,8 @@ namespace Szeminarium1_24_02_17_2
             list.Add(face5Color);
             list.Add(face6Color);
 
-            glCubeCentered = GlCube.CreateCubeWithFaceColors(Gl, face1Color, list[kivalasztottSzin], face3Color, face4Color, face5Color, face6Color);
-            glCubeRotating = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face1Color, face1Color, face1Color, face1Color, face1Color);
+            glCubeCentered = GlCube.CreateCubeWithFaceColors(Gl, list[kivalasztottSzin], face2Color, face3Color, face4Color, face5Color, face6Color);
+            glCubeRotating = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face2Color, face1Color, face1Color, face1Color, face1Color);
         }
 
         private static void Window_Closing()
