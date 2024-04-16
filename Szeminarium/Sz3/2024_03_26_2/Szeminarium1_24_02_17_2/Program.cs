@@ -107,13 +107,13 @@ namespace Szeminarium1_24_02_17_2
             //float ambientStrength = 0.2;
             vec3 ambient = ambientStrength * lightColor;
 
-            float diffuseStrength = 0.3;
+            //float diffuseStrength = 0.3;
             vec3 norm = normalize(outNormal);
             vec3 lightDir = normalize(lightPos - outWorldPosition);
             float diff = max(dot(norm, lightDir), 0.0);
             vec3 diffuse = diff * lightColor * diffuseStrength;
 
-            float specularStrength = 0.5;
+            //float specularStrength = 0.5;
             vec3 viewDir = normalize(viewPos - outWorldPosition);
             vec3 reflectDir = reflect(-lightDir, norm);
             float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess) / max(dot(norm,viewDir), -dot(norm,lightDir));
@@ -268,6 +268,8 @@ namespace Szeminarium1_24_02_17_2
             SetShininess();
 
             SetAmbientStrength();
+            SetSpecularStrength();
+            SetDiffuseStrength();
 
             DrawPulsingCenterCube();
 
@@ -301,6 +303,32 @@ namespace Szeminarium1_24_02_17_2
             }
 
             Gl.Uniform3(location, ambientStrength.X, ambientStrength.Y, ambientStrength.Z);
+            CheckError();
+        }
+
+        private static unsafe void SetSpecularStrength()
+        {
+            int location = Gl.GetUniformLocation(program, specularStrengthVariableName);
+
+            if (location == -1)
+            {
+                throw new Exception($"{specularStrengthVariableName} uniform not found on shader.");
+            }
+
+            Gl.Uniform3(location, specularStrength.X, specularStrength.Y, specularStrength.Z);
+            CheckError();
+        }
+
+        private static unsafe void SetDiffuseStrength()
+        {
+            int location = Gl.GetUniformLocation(program, diffuseStrengthVariableName);
+
+            if (location == -1)
+            {
+                throw new Exception($"{diffuseStrength} uniform not found on shader.");
+            }
+
+            Gl.Uniform3(location, diffuseStrength.X, diffuseStrength.Y, diffuseStrength.Z);
             CheckError();
         }
 
