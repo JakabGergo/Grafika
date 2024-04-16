@@ -44,6 +44,7 @@ namespace Szeminarium1_24_02_17_2
         private static Vector3D<float> specularStrength = new Vector3D<float>(0.5f, 0.5f, 0.5f);
         private static Vector3D<float> diffuseStrength = new Vector3D<float>(0.5f, 0.5f, 0.5f);
         private static Vector3D<float> ligthColor = new Vector3D<float>(1.0f, 1.0f, 1.0f);
+        private static Vector3D<float> ligthPosition = new Vector3D<float>(0.0f, 2.0f, 0.0f);
 
         private static GL Gl;
 
@@ -152,7 +153,7 @@ namespace Szeminarium1_24_02_17_2
             inputContext = window.CreateInput();
             foreach (var keyboard in inputContext.Keyboards)
             {
-                keyboard.KeyDown += Keyboard_KeyDown;
+               // keyboard.KeyDown += Keyboard_KeyDown;
             }
 
             Gl = window.CreateOpenGL();
@@ -425,7 +426,7 @@ namespace Szeminarium1_24_02_17_2
                 throw new Exception($"{LightPositionVariableName} uniform not found on shader.");
             }
 
-            Gl.Uniform3(location, 0f, 2f, 0f);
+            Gl.Uniform3(location, ligthPosition.X, ligthPosition.Y, ligthPosition.Z);
             CheckError();
         }
 
@@ -558,6 +559,9 @@ namespace Szeminarium1_24_02_17_2
             ImGuiNET.ImGui.SliderFloat("ligthColor.-R", ref ligthColor.X, 0, 1);
             ImGuiNET.ImGui.SliderFloat("ligthColor.-G", ref ligthColor.Y, 0, 1);
             ImGuiNET.ImGui.SliderFloat("ligthColor.-B", ref ligthColor.Z, 0, 1);
+            ImGuiNET.ImGui.InputFloat("ligthPosition.X", ref ligthPosition.X);
+            ImGuiNET.ImGui.InputFloat("ligthPosition.Y", ref ligthPosition.Y);
+            ImGuiNET.ImGui.InputFloat("ligthPosition.Z", ref ligthPosition.Z);
             ImGuiNET.ImGui.End();
         }
 
