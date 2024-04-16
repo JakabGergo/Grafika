@@ -33,10 +33,10 @@ namespace lab3_dezsa
             uint vao = Gl.GenVertexArray();
             Gl.BindVertexArray(vao);
             float[] vertexArray = new float[] {
-                0.0f, 0.0f, 0.0f,
-                0.5f, 0.0f, 0.0f,
+                -0.5f, -1.0f, 0.0f,
+                0.5f, -1.0f, 0.0f,
                 0.5f, 1.0f, 0.0f,
-                0.0f, 1.0f, 0.0f,
+                -0.5f, 1.0f, 0.0f,
             };
             float[] colorArray = new float[] {
                 1.0f, 0.0f, 0.0f, 1.0f,

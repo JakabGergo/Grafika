@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System.Diagnostics;
+using ImGuiNET;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -29,6 +30,7 @@ namespace lab3_dezsa
         private static uint program;
 
         private static Dezsa dezsa;
+        private static float d = (float)(1 / (2 * Math.Tan(Math.PI / 18)));
 
         //anyag tulajdonsag
         private static float Shininess = 50;
@@ -244,8 +246,11 @@ namespace lab3_dezsa
             SetViewerPosition();
             SetShininess();
 
-            DrawDezsa();
-
+            for(int i = 0; i < 18; i++)
+            {
+                DrawDezsa((float)(2 * i * (Math.PI / 18)));
+            }
+            
 
             //ImGuiNET.ImGui.ShowDemoWindow();
             ImGuiNET.ImGui.Begin("Lighting properties",
@@ -310,10 +315,13 @@ namespace lab3_dezsa
         }
 
 
-        private static unsafe void DrawDezsa()
+        private static unsafe void DrawDezsa(float forgatasiSzog)
         {
-            var modelMatrixForCenterCube = Matrix4X4.CreateScale((float)2f);
-            SetModelMatrix(modelMatrixForCenterCube);
+            Matrix4X4<float> roty = Matrix4X4.CreateRotationY(forgatasiSzog);
+            Matrix4X4<float> trans = Matrix4X4.CreateTranslation(0, 0, d); // pozicio valtozik
+
+            var modelMatrix = trans * roty;
+            SetModelMatrix(modelMatrix);
             Gl.BindVertexArray(dezsa.Vao);
             Gl.DrawElements(GLEnum.Triangles, dezsa.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
@@ -351,7 +359,6 @@ namespace lab3_dezsa
 
         private static unsafe void SetUpObjects()
         {
-
             dezsa = Dezsa.CreateDezsa(Gl);
         }
 

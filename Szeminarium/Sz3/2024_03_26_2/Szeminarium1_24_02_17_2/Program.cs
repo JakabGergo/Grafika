@@ -265,9 +265,9 @@ namespace Szeminarium1_24_02_17_2
 
             DrawPulsingCenterCube();
 
-            //DrawRevolvingCube();
+            DrawRevolvingCube();
 
-            //DrawDezsa();
+            DrawDezsa();
 
             //ImGuiNET.ImGui.ShowDemoWindow();
             ImGuiNET.ImGui.Begin("Lighting properties",
