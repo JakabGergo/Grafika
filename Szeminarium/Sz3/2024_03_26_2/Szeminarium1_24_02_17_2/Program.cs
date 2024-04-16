@@ -35,6 +35,8 @@ namespace Szeminarium1_24_02_17_2
         private static Vector3D<float> ambientStrength = new Vector3D<float>(0.5f,0.5f,0.5f);
         private static Vector3D<float> specularStrength = new Vector3D<float>(0.5f, 0.5f, 0.5f);
         private static Vector3D<float> diffuseStrength = new Vector3D<float>(0.5f, 0.5f, 0.5f);
+        private static string[] szinek = { "Piros", "Zold", "Kek", "Lila", "Aqua", "Sarga" };
+        private static int kivalasztottSzin = 0;
 
         private const string ModelMatrixVariableName = "uModel";
         private const string NormalMatrixVariableName = "uNormal";
@@ -287,8 +289,8 @@ namespace Szeminarium1_24_02_17_2
             ImGuiNET.ImGui.SliderFloat("diffuseS.-R", ref diffuseStrength.X, 0, 1);
             ImGuiNET.ImGui.SliderFloat("diffuseS.-G", ref diffuseStrength.Y, 0, 1);
             ImGuiNET.ImGui.SliderFloat("diffuseS.-B", ref diffuseStrength.Z, 0, 1);
+            ImGuiNET.ImGui.Combo("Teto szine", ref kivalasztottSzin, szinek, 6);
             ImGuiNET.ImGui.End();
-
 
             controller.Render();
         }
@@ -446,6 +448,7 @@ namespace Szeminarium1_24_02_17_2
 
         private static unsafe void SetUpObjects()
         {
+            List<float[]> list = new List<float[]>();
 
             float[] face1Color = [1.0f, 0.0f, 0.0f, 1.0f];
             float[] face2Color = [0.0f, 1.0f, 0.0f, 1.0f];
@@ -454,7 +457,14 @@ namespace Szeminarium1_24_02_17_2
             float[] face5Color = [0.0f, 1.0f, 1.0f, 1.0f];
             float[] face6Color = [1.0f, 1.0f, 0.0f, 1.0f];
 
-            glCubeCentered = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face1Color, face3Color, face4Color, face5Color, face6Color);
+            list.Add(face1Color);
+            list.Add(face2Color);
+            list.Add(face3Color);
+            list.Add(face4Color);
+            list.Add(face5Color);
+            list.Add(face6Color);
+
+            glCubeCentered = GlCube.CreateCubeWithFaceColors(Gl, face1Color, list[kivalasztottSzin], face3Color, face4Color, face5Color, face6Color);
             glCubeRotating = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face1Color, face1Color, face1Color, face1Color, face1Color);
         }
 
