@@ -9,7 +9,6 @@ namespace lab3_dezsa
 {
     internal class Dezsa
     {
-
         public uint Vao { get; }
         public uint Vertices { get; }
         public uint Colors { get; }
@@ -33,10 +32,10 @@ namespace lab3_dezsa
             uint vao = Gl.GenVertexArray();
             Gl.BindVertexArray(vao);
             float[] vertexArray = new float[] {
-                -0.5f, -1.0f, 0.0f, 0f, 1f, 0f,
-                0.5f, -1.0f, 0.0f, 0f, 1f, 0f,
-                0.5f, 1.0f, 0.0f, 0f, 1f, 0f,
-                -0.5f, 1.0f, 0.0f, 0f, 1f, 0f,
+                -0.5f, -1.0f, 0.0f, 0f, 0f, 1f,
+                 0.5f, -1.0f, 0.0f, 0f, 0f, 1f,
+                 0.5f,  1.0f, 0.0f, 0f, 0f, 1f,
+                -0.5f,  1.0f, 0.0f, 0f, 0f, 1f,
             };
             float[] colorArray = new float[] {
                 1.0f, 0.0f, 0.0f, 1.0f,
@@ -82,14 +81,17 @@ namespace lab3_dezsa
 
         public static unsafe Dezsa CreateDezsa2(GL Gl)
         {
+            float sinTizFok = (float)Math.Sin(Math.PI / 18);
+            float cosTizFok = (float)Math.Cos(Math.PI / 18);
+            
             //dezsa felepitese
             uint vao = Gl.GenVertexArray();
             Gl.BindVertexArray(vao);
             float[] vertexArray = new float[] {
-                -0.5f, -1.0f, 0.0f, 0f, 1f, 0f,
-                0.5f, -1.0f, 0.0f, 0f, 1f, 0f,
-                0.5f, 1.0f, 0.0f, 0f, 1f, 0f,
-                -0.5f, 1.0f, 0.0f, 0f, 1f, 0f,
+                -0.5f, -1.0f, 0.0f, -sinTizFok, 0f, cosTizFok,  //bal also
+                 0.5f, -1.0f, 0.0f,  sinTizFok, 0f, cosTizFok,  //jobb also
+                 0.5f,  1.0f, 0.0f,  sinTizFok, 0f, cosTizFok,  //jobb felso
+                -0.5f,  1.0f, 0.0f, -sinTizFok, 0f, cosTizFok,  //bal felso
             };
             float[] colorArray = new float[] {
                 1.0f, 0.0f, 0.0f, 1.0f,

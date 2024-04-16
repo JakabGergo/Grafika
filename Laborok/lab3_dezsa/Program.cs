@@ -284,7 +284,7 @@ namespace lab3_dezsa
                 throw new Exception($"{LightPositionVariableName} uniform not found on shader.");
             }
 
-            Gl.Uniform3(location, 0f, 0f, -4f);
+            Gl.Uniform3(location, 0f, 1f, 4f);
             CheckError();
         }
 
@@ -334,8 +334,8 @@ namespace lab3_dezsa
 
             var modelMatrix = trans * roty;
             SetModelMatrix(modelMatrix);
-            Gl.BindVertexArray(dezsa.Vao);
-            Gl.DrawElements(GLEnum.Triangles, dezsa.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(dezsa2.Vao);
+            Gl.DrawElements(GLEnum.Triangles, dezsa2.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
         }
 
