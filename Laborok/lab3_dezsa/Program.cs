@@ -12,6 +12,8 @@ namespace lab3_dezsa
         //dezsanal eltolas es forgatas kell
         //ambientStrengt atirasa vec3-ra es jojjon fel shader valtozonak es ui-val valtoztatni ezeket
         private static CameraDescriptor cameraDescriptor = new();
+        private const double AngleChangeStepSize = Math.PI / 180 * 2;
+
 
         private static IWindow window;
 
@@ -135,10 +137,10 @@ namespace lab3_dezsa
         {
             // set up input handling
             inputContext = window.CreateInput();
-            foreach (var keyboard in inputContext.Keyboards)
-            {
-                keyboard.KeyDown += Keyboard_KeyDown;
-            }
+           // foreach (var keyboard in inputContext.Keyboards)
+           // {
+           //     keyboard.KeyDown += Keyboard_KeyDown;
+           // }
 
             Gl = window.CreateOpenGL();
 
@@ -193,30 +195,19 @@ namespace lab3_dezsa
             Gl.DeleteShader(fshader);
         }
 
-        private static void Keyboard_KeyDown(IKeyboard keyboard, Key key, int arg3)
+        private static void Keyboard_KeyPressed(IKeyboard keyboard)
         {
-            switch (key)
-            {
-                case Key.Left:
-                    cameraDescriptor.DecreaseZYAngle();
-                    break;
-                    ;
-                case Key.Right:
-                    cameraDescriptor.IncreaseZYAngle();
-                    break;
-                case Key.Down:
-                    cameraDescriptor.IncreaseDistance();
-                    break;
-                case Key.Up:
-                    cameraDescriptor.DecreaseDistance();
-                    break;
-                case Key.U:
-                    cameraDescriptor.IncreaseZXAngle();
-                    break;
-                case Key.D:
-                    cameraDescriptor.DecreaseZXAngle();
-                    break;
-            }
+            if (keyboard.IsKeyPressed(Key.Left)) { cameraDescriptor.RotateAroundY(AngleChangeStepSize); }
+            if (keyboard.IsKeyPressed(Key.Left)) { cameraDescriptor.RotateAroundY(AngleChangeStepSize); }
+            if (keyboard.IsKeyPressed(Key.Right)) { cameraDescriptor.RotateAroundY(-AngleChangeStepSize); }
+            if (keyboard.IsKeyPressed(Key.Down)) { cameraDescriptor.RotateAroundX(-AngleChangeStepSize); }
+            if (keyboard.IsKeyPressed(Key.Up)) { cameraDescriptor.RotateAroundX(AngleChangeStepSize); }
+            if (keyboard.IsKeyPressed(Key.Q)) { cameraDescriptor.MoveUp(0.5f); }
+            if (keyboard.IsKeyPressed(Key.E)) { cameraDescriptor.MoveDown(0.5f); }
+            if (keyboard.IsKeyPressed(Key.A)) { cameraDescriptor.StrafeRight(0.4f); }
+            if (keyboard.IsKeyPressed(Key.D)) { cameraDescriptor.StrafeLeft(0.4f); }
+            if (keyboard.IsKeyPressed(Key.W)) { cameraDescriptor.MoveForward(0.4f); }
+            if (keyboard.IsKeyPressed(Key.S)) { cameraDescriptor.MoveBackward(0.4f); }
         }
 
         private static void Window_Update(double deltaTime)
@@ -226,6 +217,9 @@ namespace lab3_dezsa
             // make sure it is threadsafe
             // NO GL calls
             //cubeArrangementModel.AdvanceTime(deltaTime);
+
+            var keyboard = window.CreateInput().Keyboards[0];
+            Keyboard_KeyPressed(keyboard);
 
             controller.Update((float)deltaTime);
         }

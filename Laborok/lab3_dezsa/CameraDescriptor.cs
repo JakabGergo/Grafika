@@ -4,15 +4,10 @@ namespace lab3_dezsa
 {
     internal class CameraDescriptor
     {
-        private double DistanceToOrigin = 1;
-
-        private double AngleToZYPlane = 0;
-
-        private double AngleToZXPlane = 0;
-
-        private const double DistanceScaleFactor = 1.1;
-
-        private const double AngleChangeStepSize = Math.PI / 180 * 5;
+        private Vector3D<float> lookDirection = new Vector3D<float>(0, 0, -1);
+        private Vector3D<float> position = new Vector3D<float>(0, 0, 7);
+        private Vector3D<float> target = new Vector3D<float>(0, 0, 0);
+        private Vector3D<float> upVector = new Vector3D<float>(0, 1, 0);
 
         /// <summary>
         /// Gets the position of the camera.
@@ -21,7 +16,7 @@ namespace lab3_dezsa
         {
             get
             {
-                return GetPointFromAngles(DistanceToOrigin, AngleToZYPlane, AngleToZXPlane);
+                return position;
             }
         }
 
@@ -32,7 +27,7 @@ namespace lab3_dezsa
         {
             get
             {
-                return Vector3D.Normalize(GetPointFromAngles(DistanceToOrigin, AngleToZYPlane, AngleToZXPlane + Math.PI / 2));
+                return upVector;
             }
         }
 
@@ -43,49 +38,67 @@ namespace lab3_dezsa
         {
             get
             {
-                // For the moment the camera is always pointed at the origin.
-                return Vector3D<float>.Zero;
+                target = position + lookDirection;
+                return target;
             }
         }
 
-        public void IncreaseZXAngle()
+        public void StrafeLeft(float distance)
         {
-            AngleToZXPlane += AngleChangeStepSize;
+            position += Vector3D.Normalize(new Vector3D<float>(-lookDirection.Z, 0, lookDirection.X)) * distance; ;
+            target = position + lookDirection;
         }
 
-        public void DecreaseZXAngle()
+        public void StrafeRight(float distance)
         {
-            AngleToZXPlane -= AngleChangeStepSize;
+            position += Vector3D.Normalize(new Vector3D<float>(lookDirection.Z, 0, -lookDirection.X)) * distance;
+            target = position + lookDirection;
         }
 
-        public void IncreaseZYAngle()
+        public void MoveForward(float distance)
         {
-            AngleToZYPlane += AngleChangeStepSize;
-
+            position += Vector3D.Normalize(lookDirection) * distance;
+            target = position + lookDirection;
         }
 
-        public void DecreaseZYAngle()
+        public void MoveBackward(float distance)
         {
-            AngleToZYPlane -= AngleChangeStepSize;
+            position += Vector3D.Normalize(-lookDirection) * distance;
+            target = position + lookDirection;
         }
 
-        public void IncreaseDistance()
+        public void MoveUp(float distance)
         {
-            DistanceToOrigin = DistanceToOrigin * DistanceScaleFactor;
+            position.Y += distance;
+            target = position + lookDirection;
         }
 
-        public void DecreaseDistance()
+        public void MoveDown(float distance)
         {
-            DistanceToOrigin = DistanceToOrigin / DistanceScaleFactor;
+            position.Y -= distance;
+            target = position + lookDirection;
         }
 
-        private static Vector3D<float> GetPointFromAngles(double distanceToOrigin, double angleToMinZYPlane, double angleToMinZXPlane)
+        public void RotateAroundY(double angle)
         {
-            var x = distanceToOrigin * Math.Cos(angleToMinZXPlane) * Math.Sin(angleToMinZYPlane);
-            var z = distanceToOrigin * Math.Cos(angleToMinZXPlane) * Math.Cos(angleToMinZYPlane);
-            var y = distanceToOrigin * Math.Sin(angleToMinZXPlane);
+            double cosAngle = Math.Cos(angle);
+            double sinAngle = Math.Sin(angle);
 
-            return new Vector3D<float>((float)x, (float)y, (float)z);
+            double newX = lookDirection.X * cosAngle + lookDirection.Z * sinAngle;
+            double newZ = -lookDirection.X * sinAngle + lookDirection.Z * cosAngle;
+            lookDirection.X = (float)newX;
+            lookDirection.Z = (float)newZ;
+            target = position + lookDirection;
+        }
+
+        public void RotateAroundX(double angle)
+        {
+            double cosAngle = Math.Cos(angle);
+            double sinAngle = Math.Sin(angle);
+
+            double newY = lookDirection.Y * cosAngle + Math.Abs(lookDirection.Z) * sinAngle;
+            lookDirection.Y = (float)newY;
+            target = position + lookDirection;
         }
     }
 }
