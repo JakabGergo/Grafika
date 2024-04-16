@@ -10,14 +10,11 @@ namespace lab3_dezsa
 {
     internal static class Program
     {
-        //dezsanal eltolas es forgatas kell
         //ambientStrengt atirasa vec3-ra es jojjon fel shader valtozonak es ui-val valtoztatni ezeket
         private static CameraDescriptor cameraDescriptor = new();
         private const double AngleChangeStepSize = Math.PI / 180 * 2;
 
-
         private static IWindow window;
-
 
         //gombokat itt kotottuk be
         private static IInputContext inputContext;
@@ -228,8 +225,6 @@ namespace lab3_dezsa
 
         private static unsafe void Window_Render(double deltaTime)
         {
-            //Console.WriteLine($"Render after {deltaTime} [s].");
-
             // GL here
             Gl.Clear(ClearBufferMask.ColorBufferBit);
             Gl.Clear(ClearBufferMask.DepthBufferBit);
