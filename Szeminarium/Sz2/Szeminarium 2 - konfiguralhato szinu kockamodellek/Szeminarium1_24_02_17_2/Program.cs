@@ -16,7 +16,7 @@ namespace Szeminarium1_24_02_17_2
         private static CubeArrangementModel cubeArrangementModel = new();
         private static List<RubicCubeElement> rcElements;
 
-        private const double AngleChangeStepSize = Math.PI / 180 * 3;
+        private const double AngleChangeStepSize = Math.PI / 180 * 2;
 
         //random generalashoz
         private static Random random = new Random();
@@ -168,10 +168,10 @@ namespace Szeminarium1_24_02_17_2
             if (keyboard.IsKeyPressed(Key.Up)) { cameraDescriptor.RotateAroundX(AngleChangeStepSize); }
             if (keyboard.IsKeyPressed(Key.Q)) { cameraDescriptor.MoveUp(0.5f); }
             if (keyboard.IsKeyPressed(Key.E)) { cameraDescriptor.MoveDown(0.5f); }
-            if (keyboard.IsKeyPressed(Key.A)) { cameraDescriptor.StrafeRight(0.5f); }
-            if (keyboard.IsKeyPressed(Key.D)) { cameraDescriptor.StrafeLeft(0.5f); }
-            if (keyboard.IsKeyPressed(Key.W)) { cameraDescriptor.MoveForward(0.5f); }
-            if (keyboard.IsKeyPressed(Key.S)) { cameraDescriptor.MoveBackward(0.5f); }
+            if (keyboard.IsKeyPressed(Key.A)) { cameraDescriptor.StrafeRight(0.4f); }
+            if (keyboard.IsKeyPressed(Key.D)) { cameraDescriptor.StrafeLeft(0.4f); }
+            if (keyboard.IsKeyPressed(Key.W)) { cameraDescriptor.MoveForward(0.4f); }
+            if (keyboard.IsKeyPressed(Key.S)) { cameraDescriptor.MoveBackward(0.4f); }
         }
 
         private static void Keyboard_KeyDown(IKeyboard keyboard, Key key, int arg3)
