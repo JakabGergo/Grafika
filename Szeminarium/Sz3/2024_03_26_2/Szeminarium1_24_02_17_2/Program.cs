@@ -32,6 +32,7 @@ namespace Szeminarium1_24_02_17_2
         //ide kerultek a vao, vertex, color tombok, ez mar megvan nekem
         private static GlCube glCubeCentered;
         private static GlCube glCubeRotating;
+        private static Dezsa dezsa;
 
         //anyag tulajdonsag
         private static float Shininess = 50;
@@ -396,8 +397,10 @@ namespace Szeminarium1_24_02_17_2
             float[] face6Color = [1.0f, 1.0f, 0.0f, 1.0f];
 
             glCubeCentered = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face1Color, face3Color, face4Color, face5Color, face6Color);
-
             glCubeRotating = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face1Color, face1Color, face1Color, face1Color, face1Color);
+
+            dezsa = Dezsa.CreateDezsa(Gl);
+
         }
 
         private static void Window_Closing()
