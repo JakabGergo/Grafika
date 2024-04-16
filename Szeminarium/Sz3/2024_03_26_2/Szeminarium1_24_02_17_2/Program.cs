@@ -72,6 +72,9 @@ namespace Szeminarium1_24_02_17_2
         private const string LightPositionVariableName = "lightPos";
         private const string ViewPosVariableName = "viewPos";
         private const string ShininessVariableName = "shininess";
+        private const string ambientStrengthVariableName = "ambientStrength";
+        private const string specularStrengthVariableName = "specularStrength";
+        private const string diffuseStrengthVariableName = "diffuseStrength";
 
 
         //ambientStrength beallitasa -> feny erossege
