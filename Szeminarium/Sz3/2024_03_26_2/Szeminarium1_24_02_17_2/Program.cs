@@ -92,6 +92,10 @@ namespace Szeminarium1_24_02_17_2
         uniform vec3 viewPos;
         uniform float shininess;
 
+        uniform vec3 ambientStrength;
+        uniform vec3 specularStrength;
+        uniform vec3 diffuseStrength;
+
         out vec4 FragColor;
 
 		in vec4 outCol;
