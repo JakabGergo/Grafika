@@ -284,7 +284,7 @@ namespace lab3_dezsa
                 throw new Exception($"{LightPositionVariableName} uniform not found on shader.");
             }
 
-            Gl.Uniform3(location, 0f, 2f, 0f);
+            Gl.Uniform3(location, 0f, 0f, -4f);
             CheckError();
         }
 
