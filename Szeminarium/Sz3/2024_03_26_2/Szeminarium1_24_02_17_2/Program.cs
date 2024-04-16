@@ -120,7 +120,7 @@ namespace Szeminarium1_24_02_17_2
             //float specularStrength = 0.5;
             vec3 viewDir = normalize(viewPos - outWorldPosition);
             vec3 reflectDir = reflect(-lightDir, norm);
-            float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess) / max(dot(norm,viewDir), -dot(norm,lightDir));
+            float spec = sign(max(dot(norm, lightDir), 0)) * pow(max(dot(viewDir, reflectDir), 0.0), shininess) / max(dot(norm,viewDir), -dot(norm,lightDir));
             vec3 specular = specularStrength * spec * lightColor;  
 
             vec3 result = (ambient + diffuse + specular) * outCol.xyz;
