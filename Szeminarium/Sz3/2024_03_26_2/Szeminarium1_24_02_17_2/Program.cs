@@ -9,24 +9,31 @@ namespace Szeminarium1_24_02_17_2
 {
     internal static class Program
     {
+        //dezsanal eltolas es forgatas kell
+        //ambientStrengt atirasa vec3-ra es jojjon fel shader valtozonak es ui-val valtoztatni ezeket
         private static CameraDescriptor cameraDescriptor = new();
 
         private static CubeArrangementModel cubeArrangementModel = new();
 
         private static IWindow window;
 
+
+        //gombokat itt kotottuk be
         private static IInputContext inputContext;
 
         private static GL Gl;
 
+        //grafikus felulet
         private static ImGuiController controller;
 
         private static uint program;
 
-        private static GlCube glCubeCentered;
 
+        //ide kerultek a vao, vertex, color tombok, ez mar megvan nekem
+        private static GlCube glCubeCentered;
         private static GlCube glCubeRotating;
 
+        //anyag tulajdonsag
         private static float Shininess = 50;
 
         private const string ModelMatrixVariableName = "uModel";
@@ -34,6 +41,9 @@ namespace Szeminarium1_24_02_17_2
         private const string ViewMatrixVariableName = "uView";
         private const string ProjectionMatrixVariableName = "uProjection";
 
+        //normalvektor behuzasa
+        //out valtozokat a program tovabbadja a fragment shadernek
+        //vilag pontjait is tovabb adjuk
         private static readonly string VertexShaderSource = @"
         #version 330 core
         layout (location = 0) in vec3 vPos;
@@ -63,6 +73,14 @@ namespace Szeminarium1_24_02_17_2
         private const string ViewPosVariableName = "viewPos";
         private const string ShininessVariableName = "shininess";
 
+
+        //ambientStrength beallitasa -> feny erossege
+        //fenyszine lightColor, uniformoknak valtozo
+        //diffuseStregth -> minden iranyba ugyanolyan intenzitassal szorunk, mindegy honnan nezzuk a pontot ugyanugy nez ki
+        //-> ehhez kell feluleti normalis -> kockak modositasa GlCube osztaly
+        //in valtozokat a vertex shadertol kapjuk
+        //diff, ha a felulet hatulrol kapja a fenyt, akkor 0
+        //spekularis feny komponens: mashogy tunjon egy pont szine, kulonbozo nezopontbol
         private static readonly string FragmentShaderSource = @"
         #version 330 core
         
@@ -134,10 +152,10 @@ namespace Szeminarium1_24_02_17_2
             controller = new ImGuiController(Gl, window, inputContext);
 
             // Handle resizes
-            window.FramebufferResize += s =>
+            window.FramebufferResize += newSize =>
             {
                 // Adjust the viewport to the new window size
-                Gl.Viewport(s);
+                Gl.Viewport(newSize);
             };
 
 
@@ -236,6 +254,7 @@ namespace Szeminarium1_24_02_17_2
             SetViewMatrix();
             SetProjectionMatrix();
 
+            //feny szinenek beallitasa
             SetLightColor();
             SetLightPosition();
             SetViewerPosition();
@@ -347,6 +366,7 @@ namespace Szeminarium1_24_02_17_2
             Gl.UniformMatrix4(location, 1, false, (float*)&modelMatrix);
             CheckError();
 
+            //vertex shader uNormal matrix beallitas
             var modelMatrixWithoutTranslation = new Matrix4X4<float>(modelMatrix.Row1, modelMatrix.Row2, modelMatrix.Row3, modelMatrix.Row4);
             modelMatrixWithoutTranslation.M41 = 0;
             modelMatrixWithoutTranslation.M42 = 0;
@@ -379,8 +399,6 @@ namespace Szeminarium1_24_02_17_2
 
             glCubeRotating = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face1Color, face1Color, face1Color, face1Color, face1Color);
         }
-
-        
 
         private static void Window_Closing()
         {

@@ -35,6 +35,7 @@ namespace Szeminarium1_24_02_17_2
             Gl.BindVertexArray(vao);
 
             // counter clockwise is front facing
+            //a masik 3 koordinata a normalvektor, a felso lapon 
             float[] vertexArray = new float[] {
                 // top face
                 -0.5f, 0.5f, 0.5f, 0f, 1f, 0f,
@@ -127,6 +128,7 @@ namespace Szeminarium1_24_02_17_2
                 20, 23, 22
             };
 
+            //ez az eltolas oldja, majd meg hogy a normal vektorok leirasat ne tekintsuk pontoknak
             uint offsetPos = 0;
             uint offsetNormal = offsetPos + (3 * sizeof(float));
             uint vertexSize = offsetNormal + (3 * sizeof(float));
@@ -137,6 +139,7 @@ namespace Szeminarium1_24_02_17_2
             Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, vertexSize, (void*)offsetPos);
             Gl.EnableVertexAttribArray(0);
 
+            //ezt lehet lekene normalizalni
             Gl.EnableVertexAttribArray(2);
             Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, vertexSize, (void*)offsetNormal);
 

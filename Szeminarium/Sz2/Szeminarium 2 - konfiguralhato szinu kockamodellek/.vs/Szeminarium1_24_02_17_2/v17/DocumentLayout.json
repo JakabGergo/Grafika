@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\Egyetem\\2023-2024 masodev\\02_02_masodik felev\\Grafika\\Szeminarium\\Sz2\\Szeminarium 2 - konfiguralhato szinu kockamodellek\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{3413DB5A-5028-4625-95F5-05B7AB7472F2}|Szeminarium1_24_02_17_2\\Szeminarium1_24_02_17_2.csproj|d:\\egyetem\\2023-2024 masodev\\02_02_masodik felev\\grafika\\szeminarium\\sz2\\szeminarium 2 - konfiguralhato szinu kockamodellek\\szeminarium1_24_02_17_2\\glcube.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3413DB5A-5028-4625-95F5-05B7AB7472F2}|Szeminarium1_24_02_17_2\\Szeminarium1_24_02_17_2.csproj|solutionrelative:szeminarium1_24_02_17_2\\glcube.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3413DB5A-5028-4625-95F5-05B7AB7472F2}|Szeminarium1_24_02_17_2\\Szeminarium1_24_02_17_2.csproj|d:\\egyetem\\2023-2024 masodev\\02_02_masodik felev\\grafika\\szeminarium\\sz2\\szeminarium 2 - konfiguralhato szinu kockamodellek\\szeminarium1_24_02_17_2\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3413DB5A-5028-4625-95F5-05B7AB7472F2}|Szeminarium1_24_02_17_2\\Szeminarium1_24_02_17_2.csproj|solutionrelative:szeminarium1_24_02_17_2\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -14,17 +18,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "GlCube.cs",
+              "DocumentMoniker": "D:\\Egyetem\\2023-2024 masodev\\02_02_masodik felev\\Grafika\\Szeminarium\\Sz2\\Szeminarium 2 - konfiguralhato szinu kockamodellek\\Szeminarium1_24_02_17_2\\GlCube.cs",
+              "RelativeDocumentMoniker": "Szeminarium1_24_02_17_2\\GlCube.cs",
+              "ToolTip": "D:\\Egyetem\\2023-2024 masodev\\02_02_masodik felev\\Grafika\\Szeminarium\\Sz2\\Szeminarium 2 - konfiguralhato szinu kockamodellek\\Szeminarium1_24_02_17_2\\GlCube.cs",
+              "RelativeToolTip": "Szeminarium1_24_02_17_2\\GlCube.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAQwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-16T07:45:14.71Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Egyetem\\2023-2024 masodev\\02_02_masodik felev\\Grafika\\Szeminarium\\Sz2\\Szeminarium 2 - konfiguralhato szinu kockamodellek\\Szeminarium1_24_02_17_2\\Program.cs",
               "RelativeDocumentMoniker": "Szeminarium1_24_02_17_2\\Program.cs",
               "ToolTip": "D:\\Egyetem\\2023-2024 masodev\\02_02_masodik felev\\Grafika\\Szeminarium\\Sz2\\Szeminarium 2 - konfiguralhato szinu kockamodellek\\Szeminarium1_24_02_17_2\\Program.cs",
               "RelativeToolTip": "Szeminarium1_24_02_17_2\\Program.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABIAAABFAAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABIAAABFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-27T10:45:23.5Z",
               "EditorCaption": ""
