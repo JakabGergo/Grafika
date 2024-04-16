@@ -28,37 +28,43 @@ namespace Szeminarium1_24_02_17_2
             Gl.BindVertexArray(vao);
 
             // counter clockwise is front facing
+            //a masik 3 koordinata a normalvektor, a felso lapon 
             float[] vertexArray = new float[] {
-                -0.5f, 0.5f, 0.5f,
-                0.5f, 0.5f, 0.5f,
-                0.5f, 0.5f, -0.5f,
-                -0.5f, 0.5f, -0.5f,
+                // top face
+                -0.5f, 0.5f, 0.5f, 0f, 1f, 0f,
+                0.5f, 0.5f, 0.5f, 0f, 1f, 0f,
+                0.5f, 0.5f, -0.5f, 0f, 1f, 0f,
+                -0.5f, 0.5f, -0.5f, 0f, 1f, 0f,
 
-                -0.5f, 0.5f, 0.5f,
-                -0.5f, -0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
-                0.5f, 0.5f, 0.5f,
+                // front face
+                -0.5f, 0.5f, 0.5f, 0f, 0f, 1f,
+                -0.5f, -0.5f, 0.5f, 0f, 0f, 1f,
+                0.5f, -0.5f, 0.5f, 0f, 0f, 1f,
+                0.5f, 0.5f, 0.5f, 0f, 0f, 1f,
 
-                -0.5f, 0.5f, 0.5f,
-                -0.5f, 0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f, 0.5f,
+                // left face
+                -0.5f, 0.5f, 0.5f, -1f, 0f, 0f,
+                -0.5f, 0.5f, -0.5f, -1f, 0f, 0f,
+                -0.5f, -0.5f, -0.5f, -1f, 0f, 0f,
+                -0.5f, -0.5f, 0.5f, -1f, 0f, 0f,
 
-                -0.5f, -0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
-                0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
+                // bottom face
+                -0.5f, -0.5f, 0.5f, 0f, -1f, 0f,
+                0.5f, -0.5f, 0.5f,0f, -1f, 0f,
+                0.5f, -0.5f, -0.5f,0f, -1f, 0f,
+                -0.5f, -0.5f, -0.5f,0f, -1f, 0f,
 
-                0.5f, 0.5f, -0.5f,
-                -0.5f, 0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
+                // back face
+                0.5f, 0.5f, -0.5f, 0f, 0f, -1f,
+                -0.5f, 0.5f, -0.5f,0f, 0f, -1f,
+                -0.5f, -0.5f, -0.5f,0f, 0f, -1f,
+                0.5f, -0.5f, -0.5f,0f, 0f, -1f,
 
-                0.5f, 0.5f, 0.5f,
-                0.5f, 0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, 0.5f,
-
+                // right face
+                0.5f, 0.5f, 0.5f, 1f, 0f, 0f,
+                0.5f, 0.5f, -0.5f,1f, 0f, 0f,
+                0.5f, -0.5f, -0.5f,1f, 0f, 0f,
+                0.5f, -0.5f, 0.5f,1f, 0f, 0f
             };
 
             List<float> colorsList = new List<float>();
@@ -115,11 +121,20 @@ namespace Szeminarium1_24_02_17_2
                 20, 23, 22
             };
 
+            //ez az eltolas oldja, majd meg hogy a normal vektorok leirasat ne tekintsuk pontoknak
+            uint offsetPos = 0;
+            uint offsetNormal = offsetPos + (3 * sizeof(float));
+            uint vertexSize = offsetNormal + (3 * sizeof(float));
+
             uint vertices = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ArrayBuffer, vertices);
             Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)vertexArray.AsSpan(), GLEnum.StaticDraw);
-            Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, null);
+            Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, vertexSize, (void*)offsetPos);
             Gl.EnableVertexAttribArray(0);
+
+            //ezt lehet lekene normalizalni
+            Gl.EnableVertexAttribArray(2);
+            Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, vertexSize, (void*)offsetNormal);
 
             uint colors = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ArrayBuffer, colors);
