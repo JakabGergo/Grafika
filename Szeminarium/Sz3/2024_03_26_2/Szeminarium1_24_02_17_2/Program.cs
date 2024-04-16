@@ -35,6 +35,7 @@ namespace Szeminarium1_24_02_17_2
         private static Vector3D<float> ambientStrength = new Vector3D<float>(0.5f,0.5f,0.5f);
         private static Vector3D<float> specularStrength = new Vector3D<float>(0.5f, 0.5f, 0.5f);
         private static Vector3D<float> diffuseStrength = new Vector3D<float>(0.5f, 0.5f, 0.5f);
+        private static Vector3D<float> ligthColor = new Vector3D<float>(1.0f, 1.0f, 1.0f);
         private static string[] szinek = { "Piros", "Zold", "Kek", "Lila", "Aqua", "Sarga" };
         private static int kivalasztottSzin = 0;
         private static int elozoSzin = 0;
@@ -288,6 +289,9 @@ namespace Szeminarium1_24_02_17_2
             ImGuiNET.ImGui.SliderFloat("diffuseS.-R", ref diffuseStrength.X, 0, 1);
             ImGuiNET.ImGui.SliderFloat("diffuseS.-G", ref diffuseStrength.Y, 0, 1);
             ImGuiNET.ImGui.SliderFloat("diffuseS.-B", ref diffuseStrength.Z, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("ligthColor.-R", ref ligthColor.X, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("ligthColor.-G", ref ligthColor.Y, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("ligthColor.-B", ref ligthColor.Z, 0, 1);
             ImGuiNET.ImGui.Combo("Teto szine", ref kivalasztottSzin, szinek, 6);
             ImGuiNET.ImGui.End();
 
@@ -353,7 +357,7 @@ namespace Szeminarium1_24_02_17_2
                 throw new Exception($"{LightColorVariableName} uniform not found on shader.");
             }
 
-            Gl.Uniform3(location, 1f, 1f, 1f);
+            Gl.Uniform3(location, ligthColor.X, ligthColor.Y, ligthColor.Z);
             CheckError();
         }
 
