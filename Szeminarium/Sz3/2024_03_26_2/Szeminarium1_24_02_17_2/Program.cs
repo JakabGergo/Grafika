@@ -9,14 +9,11 @@ namespace Szeminarium1_24_02_17_2
 {
     internal static class Program
     {
-        //dezsanal eltolas es forgatas kell
-        //ambientStrengt atirasa vec3-ra es jojjon fel shader valtozonak es ui-val valtoztatni ezeket
         private static CameraDescriptor cameraDescriptor = new();
 
         private static CubeArrangementModel cubeArrangementModel = new();
 
         private static IWindow window;
-
 
         //gombokat itt kotottuk be
         private static IInputContext inputContext;
@@ -32,10 +29,12 @@ namespace Szeminarium1_24_02_17_2
         //ide kerultek a vao, vertex, color tombok, ez mar megvan nekem
         private static GlCube glCubeCentered;
         private static GlCube glCubeRotating;
-        private static Dezsa dezsa;
 
         //anyag tulajdonsag
         private static float Shininess = 50;
+        private static Vector3D<float> ambientStrength = new Vector3D<float>(0.5f,0.5f,0.5f);
+        private static Vector3D<float> specularStrength = new Vector3D<float>(0.5f, 0.5f, 0.5f);
+        private static Vector3D<float> diffuseStrength = new Vector3D<float>(0.5f, 0.5f, 0.5f);
 
         private const string ModelMatrixVariableName = "uModel";
         private const string NormalMatrixVariableName = "uNormal";
@@ -122,7 +121,7 @@ namespace Szeminarium1_24_02_17_2
         {
             WindowOptions windowOptions = WindowOptions.Default;
             windowOptions.Title = "2 szeminárium";
-            windowOptions.Size = new Vector2D<int>(500, 500);
+            windowOptions.Size = new Vector2D<int>(750, 750);
 
             // on some systems there is no depth buffer by default, so we need to make sure one is created
             windowOptions.PreferredDepthBufferBits = 24;
@@ -205,23 +204,23 @@ namespace Szeminarium1_24_02_17_2
         {
             switch (key)
             {
-                case Key.Left:
+                case Key.A:
                     cameraDescriptor.DecreaseZYAngle();
                     break;
                     ;
-                case Key.Right:
+                case Key.D:
                     cameraDescriptor.IncreaseZYAngle();
                     break;
-                case Key.Down:
+                case Key.S:
                     cameraDescriptor.IncreaseDistance();
                     break;
-                case Key.Up:
+                case Key.W:
                     cameraDescriptor.DecreaseDistance();
                     break;
-                case Key.U:
+                case Key.Q:
                     cameraDescriptor.IncreaseZXAngle();
                     break;
-                case Key.D:
+                case Key.E:
                     cameraDescriptor.DecreaseZXAngle();
                     break;
                 case Key.Space:
@@ -261,18 +260,22 @@ namespace Szeminarium1_24_02_17_2
             SetViewerPosition();
             SetShininess();
 
-            DrawDezsa();
-
             DrawPulsingCenterCube();
 
             DrawRevolvingCube();
 
-            DrawDezsa();
-
             //ImGuiNET.ImGui.ShowDemoWindow();
-            ImGuiNET.ImGui.Begin("Lighting properties",
-                ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
+            ImGuiNET.ImGui.Begin("Lighting properties", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
             ImGuiNET.ImGui.SliderFloat("Shininess", ref Shininess, 1, 200);
+            ImGuiNET.ImGui.SliderFloat("ambientS.-R", ref ambientStrength.X, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("ambientS.-G", ref ambientStrength.Y, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("ambientS.-B", ref ambientStrength.Z, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("specularS.-R", ref specularStrength.X, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("specularS.-G", ref specularStrength.Y, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("specularS.-B", ref specularStrength.Z, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("diffuseS.-R", ref diffuseStrength.X, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("diffuseS.-G", ref diffuseStrength.Y, 0, 1);
+            ImGuiNET.ImGui.SliderFloat("diffuseS.-B", ref diffuseStrength.Z, 0, 1);
             ImGuiNET.ImGui.End();
 
 
@@ -360,12 +363,6 @@ namespace Szeminarium1_24_02_17_2
             Gl.BindVertexArray(0);
         }
 
-        private static unsafe void DrawDezsa()
-        {
-            Gl.BindVertexArray(dezsa.Vao);
-            Gl.DrawElements(GLEnum.Triangles, dezsa.IndexArrayLength, GLEnum.UnsignedInt, null);
-            Gl.BindVertexArray(0);
-        }
 
         private static unsafe void SetModelMatrix(Matrix4X4<float> modelMatrix)
         {
@@ -409,15 +406,12 @@ namespace Szeminarium1_24_02_17_2
 
             glCubeCentered = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face1Color, face3Color, face4Color, face5Color, face6Color);
             glCubeRotating = GlCube.CreateCubeWithFaceColors(Gl, face1Color, face1Color, face1Color, face1Color, face1Color, face1Color);
-
-            dezsa = Dezsa.CreateDezsa(Gl);
         }
 
         private static void Window_Closing()
         {
             glCubeCentered.ReleaseGlCube();
             glCubeRotating.ReleaseGlCube();
-            dezsa.ReleaseDezsa();
         }
 
         private static unsafe void SetProjectionMatrix()
