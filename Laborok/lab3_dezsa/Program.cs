@@ -32,6 +32,7 @@ namespace lab3_dezsa
         private static Dezsa dezsa2;
         private static float d = (float)(1 / (2 * Math.Tan(Math.PI / 18)));
 
+
         //anyag tulajdonsag
         private static float Shininess = 50;
 
