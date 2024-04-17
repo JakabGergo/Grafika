@@ -67,7 +67,9 @@ namespace lab3_dezsa
         }
         ";
 
-        //Gourard arnyalas
+
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Gouard arnyalas
         private static readonly string VertexShaderSourceGourard = @"
         #version 330 core
         layout (location = 0) in vec3 vPos;
@@ -91,6 +93,8 @@ namespace lab3_dezsa
             outWorldPosition = vec3(uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0));
         }
         ";
+
+
 
         private const string LightColorVariableName = "lightColor";
         private const string LightPositionVariableName = "lightPos";
@@ -141,7 +145,8 @@ namespace lab3_dezsa
         }
         ";
 
-        //Gouard arnyalas
+        
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Gouard arnyalas
         private static readonly string FragmentShaderSourceGouard = @"
         #version 330 core
         
@@ -158,7 +163,7 @@ namespace lab3_dezsa
 
         void main()
         {
-            float ambientStrength = 0.2;
+            float ambientStrength = 0.5;
             vec3 ambient = ambientStrength * lightColor;
 
             float diffuseStrength = 0.3;
@@ -177,6 +182,7 @@ namespace lab3_dezsa
             FragColor = vec4(result, outCol.w);
         }
         ";
+
 
         static void Main(string[] args)
         {
@@ -324,8 +330,14 @@ namespace lab3_dezsa
             Gl.Clear(ClearBufferMask.ColorBufferBit);
             Gl.Clear(ClearBufferMask.DepthBufferBit);
 
-            //feltetel
-            Gl.UseProgram(program);
+            if (phongArnyalas)
+            {
+                Gl.UseProgram(program);
+            }
+            else
+            {
+                Gl.UseProgram(programGourard);
+            }
 
             SetViewMatrix();
             SetProjectionMatrix();
