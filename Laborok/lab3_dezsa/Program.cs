@@ -25,6 +25,7 @@ namespace lab3_dezsa
         private static ImGuiController controller;
 
         private static uint program;
+        private static uint programGourard;
 
         private static Dezsa dezsa;
         private static Dezsa dezsa2;
@@ -263,26 +264,26 @@ namespace lab3_dezsa
             uint vshader = Gl.CreateShader(ShaderType.VertexShader);
             uint fshader = Gl.CreateShader(ShaderType.FragmentShader);
 
-            Gl.ShaderSource(vshader, VertexShaderSource);
+            Gl.ShaderSource(vshader, VertexShaderSourceGourard);
             Gl.CompileShader(vshader);
             Gl.GetShader(vshader, ShaderParameterName.CompileStatus, out int vStatus);
             if (vStatus != (int)GLEnum.True)
                 throw new Exception("Vertex shader failed to compile: " + Gl.GetShaderInfoLog(vshader));
 
-            Gl.ShaderSource(fshader, FragmentShaderSource);
+            Gl.ShaderSource(fshader, FragmentShaderSourceGouard);
             Gl.CompileShader(fshader);
 
-            program = Gl.CreateProgram();
-            Gl.AttachShader(program, vshader);
-            Gl.AttachShader(program, fshader);
-            Gl.LinkProgram(program);
-            Gl.GetProgram(program, GLEnum.LinkStatus, out var status);
+            programGourard = Gl.CreateProgram();
+            Gl.AttachShader(programGourard, vshader);
+            Gl.AttachShader(programGourard, fshader);
+            Gl.LinkProgram(programGourard);
+            Gl.GetProgram(programGourard, GLEnum.LinkStatus, out var status);
             if (status == 0)
             {
-                Console.WriteLine($"Error linking shader {Gl.GetProgramInfoLog(program)}");
+                Console.WriteLine($"Error linking shader {Gl.GetProgramInfoLog(programGourard)}");
             }
-            Gl.DetachShader(program, vshader);
-            Gl.DetachShader(program, fshader);
+            Gl.DetachShader(programGourard, vshader);
+            Gl.DetachShader(programGourard, fshader);
             Gl.DeleteShader(vshader);
             Gl.DeleteShader(fshader);
         }
