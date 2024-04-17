@@ -65,6 +65,31 @@ namespace lab3_dezsa
         }
         ";
 
+        //Gourard arnyalas
+        private static readonly string VertexShaderSourceGourard = @"
+        #version 330 core
+        layout (location = 0) in vec3 vPos;
+		layout (location = 1) in vec4 vCol;
+        layout (location = 2) in vec3 vNorm;
+
+        uniform mat4 uModel;
+        uniform mat3 uNormal;
+        uniform mat4 uView;
+        uniform mat4 uProjection;
+
+		out vec4 outCol;
+        out vec3 outNormal;
+        out vec3 outWorldPosition;
+        
+        void main()
+        {
+			outCol = vCol;
+            gl_Position = uProjection*uView*uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0);
+            outNormal = uNormal*vNorm;
+            outWorldPosition = vec3(uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0));
+        }
+        ";
+
         private const string LightColorVariableName = "lightColor";
         private const string LightPositionVariableName = "lightPos";
         private const string ViewPosVariableName = "viewPos";
@@ -79,6 +104,43 @@ namespace lab3_dezsa
         //diff, ha a felulet hatulrol kapja a fenyt, akkor 0
         //spekularis feny komponens: mashogy tunjon egy pont szine, kulonbozo nezopontbol
         private static readonly string FragmentShaderSource = @"
+        #version 330 core
+        
+        uniform vec3 lightColor;
+        uniform vec3 lightPos;
+        uniform vec3 viewPos;
+        uniform float shininess;
+
+        out vec4 FragColor;
+
+		in vec4 outCol;
+        in vec3 outNormal;
+        in vec3 outWorldPosition;
+
+        void main()
+        {
+            float ambientStrength = 0.2;
+            vec3 ambient = ambientStrength * lightColor;
+
+            float diffuseStrength = 0.3;
+            vec3 norm = normalize(outNormal);
+            vec3 lightDir = normalize(lightPos - outWorldPosition);
+            float diff = max(dot(norm, lightDir), 0.0);
+            vec3 diffuse = diff * lightColor * diffuseStrength;
+
+            float specularStrength = 0.5;
+            vec3 viewDir = normalize(viewPos - outWorldPosition);
+            vec3 reflectDir = reflect(-lightDir, norm);
+            float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess) / max(dot(norm,viewDir), -dot(norm,lightDir));
+            vec3 specular = specularStrength * spec * lightColor;  
+
+            vec3 result = (ambient + diffuse + specular) * outCol.xyz;
+            FragColor = vec4(result, outCol.w);
+        }
+        ";
+
+        //Gouard arnyalas
+        private static readonly string FragmentShaderSourceGouard = @"
         #version 330 core
         
         uniform vec3 lightColor;
@@ -159,6 +221,7 @@ namespace lab3_dezsa
             SetUpObjects();
 
             LinkProgram();
+            LinkProgramGourard();
 
             //Gl.Enable(EnableCap.CullFace);
 
@@ -167,6 +230,35 @@ namespace lab3_dezsa
         }
 
         private static void LinkProgram()
+        {
+            uint vshader = Gl.CreateShader(ShaderType.VertexShader);
+            uint fshader = Gl.CreateShader(ShaderType.FragmentShader);
+
+            Gl.ShaderSource(vshader, VertexShaderSource);
+            Gl.CompileShader(vshader);
+            Gl.GetShader(vshader, ShaderParameterName.CompileStatus, out int vStatus);
+            if (vStatus != (int)GLEnum.True)
+                throw new Exception("Vertex shader failed to compile: " + Gl.GetShaderInfoLog(vshader));
+
+            Gl.ShaderSource(fshader, FragmentShaderSource);
+            Gl.CompileShader(fshader);
+
+            program = Gl.CreateProgram();
+            Gl.AttachShader(program, vshader);
+            Gl.AttachShader(program, fshader);
+            Gl.LinkProgram(program);
+            Gl.GetProgram(program, GLEnum.LinkStatus, out var status);
+            if (status == 0)
+            {
+                Console.WriteLine($"Error linking shader {Gl.GetProgramInfoLog(program)}");
+            }
+            Gl.DetachShader(program, vshader);
+            Gl.DetachShader(program, fshader);
+            Gl.DeleteShader(vshader);
+            Gl.DeleteShader(fshader);
+        }
+
+        private static void LinkProgramGourard()
         {
             uint vshader = Gl.CreateShader(ShaderType.VertexShader);
             uint fshader = Gl.CreateShader(ShaderType.FragmentShader);
