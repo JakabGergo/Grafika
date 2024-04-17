@@ -67,40 +67,10 @@ namespace lab3_dezsa
         }
         ";
 
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Gouard arnyalas
-        private static readonly string VertexShaderSourceGourard = @"
-        #version 330 core
-        layout (location = 0) in vec3 vPos;
-		layout (location = 1) in vec4 vCol;
-        layout (location = 2) in vec3 vNorm;
-
-        uniform mat4 uModel;
-        uniform mat3 uNormal;
-        uniform mat4 uView;
-        uniform mat4 uProjection;
-
-		out vec4 outCol;
-        out vec3 outNormal;
-        out vec3 outWorldPosition;
-        
-        void main()
-        {
-			outCol = vCol;
-            gl_Position = uProjection*uView*uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0);
-            outNormal = uNormal*vNorm;
-            outWorldPosition = vec3(uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0));
-        }
-        ";
-
-
-
         private const string LightColorVariableName = "lightColor";
         private const string LightPositionVariableName = "lightPos";
         private const string ViewPosVariableName = "viewPos";
         private const string ShininessVariableName = "shininess";
-
 
         //ambientStrength beallitasa -> feny erossege
         //fenyszine lightColor, uniformoknak valtozo
@@ -145,8 +115,33 @@ namespace lab3_dezsa
         }
         ";
 
-        
+
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Gouard arnyalas
+        private static readonly string VertexShaderSourceGourard = @"
+        #version 330 core
+        layout (location = 0) in vec3 vPos;
+		layout (location = 1) in vec4 vCol;
+        layout (location = 2) in vec3 vNorm;
+
+        uniform mat4 uModel;
+        uniform mat3 uNormal;
+        uniform mat4 uView;
+        uniform mat4 uProjection;
+
+		out vec4 outCol;
+        out vec3 outNormal;
+        out vec3 outWorldPosition;
+        
+        void main()
+        {
+			outCol = vCol;
+            gl_Position = uProjection*uView*uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0);
+            outNormal = uNormal*vNorm;
+            outWorldPosition = vec3(uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0));
+        }
+        ";
+
         private static readonly string FragmentShaderSourceGouard = @"
         #version 330 core
         
@@ -182,7 +177,7 @@ namespace lab3_dezsa
             FragColor = vec4(result, outCol.w);
         }
         ";
-
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Gouard arnyalas
 
         static void Main(string[] args)
         {
