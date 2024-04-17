@@ -26,7 +26,7 @@ namespace lab3_dezsa
 
         private static uint program;
         private static uint programGourard;
-        private static bool phongArnyalas;
+        private static bool phongArnyalas = true;
 
         private static Dezsa dezsa;
         private static Dezsa dezsa2;
@@ -345,15 +345,22 @@ namespace lab3_dezsa
                 DrawDezsa2((float)(2 * i * (Math.PI / 18)));
             }
 
-
             //ImGuiNET.ImGui.ShowDemoWindow();
             ImGuiNET.ImGui.Begin("Lighting properties",
                 ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
             ImGuiNET.ImGui.SliderFloat("Shininess", ref Shininess, 1, 200);
+            
             ImGuiNET.ImGui.RadioButton("Phong arnyalas", phongArnyalas);
+            if (ImGuiNET.ImGui.IsItemClicked())
+            {
+                phongArnyalas = true;
+            }
             ImGuiNET.ImGui.RadioButton("Gourard arnyalas", !phongArnyalas);
+            if (ImGuiNET.ImGui.IsItemClicked())
+            {
+                phongArnyalas = false;
+            }
             ImGuiNET.ImGui.End();
-
 
             controller.Render();
         }
