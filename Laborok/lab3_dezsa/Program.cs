@@ -26,6 +26,7 @@ namespace lab3_dezsa
 
         private static uint program;
         private static uint programGourard;
+        private static bool phongArnyalas;
 
         private static Dezsa dezsa;
         private static Dezsa dezsa2;
@@ -132,7 +133,7 @@ namespace lab3_dezsa
             float specularStrength = 0.5;
             vec3 viewDir = normalize(viewPos - outWorldPosition);
             vec3 reflectDir = reflect(-lightDir, norm);
-            float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess) / max(dot(norm,viewDir), -dot(norm,lightDir));
+            float spec = sign(max(dot(norm, lightDir), 0)) * pow(max(dot(viewDir, reflectDir), 0.0), shininess) /max(dot(norm,viewDir), -dot(norm,lightDir));
             vec3 specular = specularStrength * spec * lightColor;  
 
             vec3 result = (ambient + diffuse + specular) * outCol.xyz;
@@ -169,7 +170,7 @@ namespace lab3_dezsa
             float specularStrength = 0.5;
             vec3 viewDir = normalize(viewPos - outWorldPosition);
             vec3 reflectDir = reflect(-lightDir, norm);
-            float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess) / max(dot(norm,viewDir), -dot(norm,lightDir));
+            float spec = sign(max(dot(norm, lightDir), 0)) * pow(max(dot(viewDir, reflectDir), 0.0), shininess) /max(dot(norm,viewDir), -dot(norm,lightDir));
             vec3 specular = specularStrength * spec * lightColor;  
 
             vec3 result = (ambient + diffuse + specular) * outCol.xyz;
@@ -349,6 +350,8 @@ namespace lab3_dezsa
             ImGuiNET.ImGui.Begin("Lighting properties",
                 ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
             ImGuiNET.ImGui.SliderFloat("Shininess", ref Shininess, 1, 200);
+            ImGuiNET.ImGui.RadioButton("Phong arnyalas", phongArnyalas);
+            ImGuiNET.ImGui.RadioButton("Gourard arnyalas", !phongArnyalas);
             ImGuiNET.ImGui.End();
 
 
@@ -377,7 +380,7 @@ namespace lab3_dezsa
                 throw new Exception($"{LightPositionVariableName} uniform not found on shader.");
             }
 
-            Gl.Uniform3(location, 0f, 1f, 4f);
+            Gl.Uniform3(location, 0f, 1f, 5f);
             CheckError();
         }
 
