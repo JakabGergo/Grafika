@@ -323,7 +323,7 @@ namespace lab3_dezsa
             Gl.Clear(ClearBufferMask.ColorBufferBit);
             Gl.Clear(ClearBufferMask.DepthBufferBit);
 
-
+            //feltetel
             Gl.UseProgram(program);
 
             SetViewMatrix();

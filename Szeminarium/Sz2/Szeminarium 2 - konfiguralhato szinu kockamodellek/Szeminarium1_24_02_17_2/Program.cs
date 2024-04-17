@@ -542,6 +542,17 @@ namespace Szeminarium1_24_02_17_2
                     lep = (6, -float.Pi / 2);
                     forgat = true;
                 }
+                if (ImGui.Button("Random"))
+                {
+                    forgat = true;
+                    for (int i = 0; i < 30; i++)
+                    {
+                        int randomNumber = random.Next(1, 7);
+                        int elojel = random.Next(1, 3);
+                        if (elojel == 1) { randomLepesek.Add((randomNumber, -float.Pi / 2)); }
+                        else { randomLepesek.Add((randomNumber, float.Pi / 2)); }
+                    }
+                }
             }
             ImGui.PopStyleColor();
             //ImGuiNET.ImGui.ShowDemoWindow();
