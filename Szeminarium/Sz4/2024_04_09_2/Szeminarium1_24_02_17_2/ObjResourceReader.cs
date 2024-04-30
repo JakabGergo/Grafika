@@ -4,18 +4,23 @@ using Silk.NET.OpenGL;
 
 namespace Szeminarium1_24_02_17_2
 {
+    //objektumok olvasasa a resource mappabol
     internal class ObjResourceReader
     {
+        //olyan, mint amikor kockat hoztunk letre, csak itt minden adott az obj fajlokbol
         public static unsafe GlObject CreateTeapotWithColor(GL Gl, float[] faceColor)
         {
             uint vao = Gl.GenVertexArray();
             Gl.BindVertexArray(vao);
 
+            // ezekbe meg nincsenek normalisok
             List<float[]> objVertices;
             List<int[]> objFaces;
 
+            // beolvassuk az objektumot
             ReadObjDataForTeapot(out objVertices, out objFaces);
 
+            // itt rakunk normalist es szineket az objektumnak (mint eddig)
             List<float> glVertices = new List<float>();
             List<float> glColors = new List<float>();
             List<uint> glIndices = new List<uint>();
@@ -63,6 +68,7 @@ namespace Szeminarium1_24_02_17_2
 
             foreach (var objFace in objFaces)
             {
+                // normalvektor kiszamitasa
                 var aObjVertex = objVertices[objFace[0] - 1];
                 var a = new Vector3D<float>(aObjVertex[0], aObjVertex[1], aObjVertex[2]);
                 var bObjVertex = objVertices[objFace[1] - 1];
@@ -72,6 +78,7 @@ namespace Szeminarium1_24_02_17_2
 
                 var normal = Vector3D.Normalize(Vector3D.Cross(b - a, c - a));
 
+                // vao frissitese, normalvektor hozzaadasa
                 // process 3 vertices
                 for (int i = 0; i < objFace.Length; ++i)
                 {
@@ -102,8 +109,11 @@ namespace Szeminarium1_24_02_17_2
 
         private static unsafe void ReadObjDataForTeapot(out List<float[]> objVertices, out List<int[]> objFaces)
         {
+            //objektum leirasanak beolvasasa
             objVertices = new List<float[]>();
             objFaces = new List<int[]>();
+
+            //azert van zarojelbe, hogy hiba eseten alljon le
             using (Stream objStream = typeof(ObjResourceReader).Assembly.GetManifestResourceStream("Szeminarium1_24_02_17_2.Resources.teapot.obj"))
             using (StreamReader objReader = new StreamReader(objStream))
             {
@@ -111,10 +121,14 @@ namespace Szeminarium1_24_02_17_2
                 {
                     var line = objReader.ReadLine();
 
+                    // ures sor vagy komment atugrasa
                     if (String.IsNullOrEmpty(line) || line.Trim().StartsWith("#"))
                         continue;
 
+                    // kivesszuk az obj sor elso betujet, hogy vertex vagy face
                     var lineClassifier = line.Substring(0, line.IndexOf(' '));
+                    
+                    // a sorokat vagjuk szokozok menten igy kapjuk meg a haromszogek koordinatait
                     var lineData = line.Substring(lineClassifier.Length).Trim().Split(' ');
 
                     switch (lineClassifier)
@@ -130,6 +144,9 @@ namespace Szeminarium1_24_02_17_2
                             for (int i = 0; i < face.Length; ++i)
                                 face[i] = int.Parse(lineData[i], CultureInfo.InvariantCulture);
                             objFaces.Add(face);
+                            break;
+                        default:
+                            throw new Exception("Unexpected obj component.");
                             break;
                     }
                 }

@@ -23,6 +23,7 @@ namespace Szeminarium1_24_02_17_2
 
         private static uint program;
 
+        //teaskanna letrehozasa
         private static GlObject teapot;
 
         private static GlObject table;
