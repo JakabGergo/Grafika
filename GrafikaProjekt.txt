@@ -1,0 +1,2 @@
+Egy futball stadionban (vagy egyszerű foci pályát imitáló környezetben) a felhasználó egy labdát mozgat. A pályán ellenfél játékosok vannak, akik valamilyen mozgást végeznek.  A felhasználónak köztük mozogva kell eljuttatnia a labdát a kapuba. A játék játszható labda nézetből vagy felső nézetből.
+(csocsóra hasonlító játék, ahol a felhasználó a labdát irányítja)
