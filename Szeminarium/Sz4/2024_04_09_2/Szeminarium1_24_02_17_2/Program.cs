@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System.Numerics;
+using ImGuiNET;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -25,6 +26,7 @@ namespace Szeminarium1_24_02_17_2
 
         //teaskanna letrehozasa
         private static GlObject teapot;
+        private static GlObject modelCube;
 
         private static GlObject table;
 
@@ -247,6 +249,7 @@ namespace Szeminarium1_24_02_17_2
             SetShininess();
 
             DrawPulsingTeapot();
+            DrawPulsingModelCube();
 
             DrawRevolvingCube();
 
@@ -347,6 +350,19 @@ namespace Szeminarium1_24_02_17_2
             Gl.BindVertexArray(0);
         }
 
+        private static unsafe void DrawPulsingModelCube()
+        {
+            // set material uniform to rubber
+            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(5, 1, 0));
+            var scaleForCenterCube = Matrix4X4.CreateScale((float)cubeArrangementModel.CenterCubeScale);
+            var modelMatrixForCenterCube = scaleForCenterCube * translationForCenterCube;
+
+            SetModelMatrix(modelMatrixForCenterCube);
+            Gl.BindVertexArray(modelCube.Vao);
+            Gl.DrawElements(GLEnum.Triangles, modelCube.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+        }
+
         private static unsafe void SetModelMatrix(Matrix4X4<float> modelMatrix)
         {
             int location = Gl.GetUniformLocation(program, ModelMatrixVariableName);
@@ -387,6 +403,8 @@ namespace Szeminarium1_24_02_17_2
             float[] face6Color = [1.0f, 1.0f, 0.0f, 1.0f];
 
             teapot = ObjResourceReader.CreateTeapotWithColor(Gl, face1Color);
+            modelCube = ObjResourceReader.CreateObjCubeWithColor(Gl, face2Color);
+            //teapot = ObjResourceReader.CreateObjCubeWithColor(Gl, face1Color);
 
             float[] tableColor = [System.Drawing.Color.Azure.R/256f,
                                   System.Drawing.Color.Azure.G/256f,
@@ -402,6 +420,7 @@ namespace Szeminarium1_24_02_17_2
         private static void Window_Closing()
         {
             teapot.ReleaseGlObject();
+            modelCube.ReleaseGlObject();
             glCubeRotating.ReleaseGlObject();
         }
 
