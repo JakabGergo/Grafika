@@ -107,6 +107,7 @@ namespace Szeminarium1_24_02_17_2
             objNormals = new List<float[]>();
             objFacesPosition = new List<int[]>();
             objFacesNormal = new List<int[]>();
+            float[] transformationMatrix = new float[16]; //transzformacios matrix egyelore nem hasznaljuk
 
             // collada fajl kezelese mint xml dokumentum
             XmlDocument doc = new XmlDocument();
@@ -115,6 +116,17 @@ namespace Szeminarium1_24_02_17_2
             // ez kell ahhoz, hogy az xml fajlt megfeleloen tudjuk ertelmezni
             XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
             namespaceManager.AddNamespace("c", "http://www.collada.org/2005/11/COLLADASchema");
+
+            //transzformacios matrix beolvasasa
+            XmlNode transformNode = doc.SelectSingleNode("//c:node/c:matrix", namespaceManager);
+            if (transformNode != null)
+            {
+                string[] transformData = transformNode.InnerText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < 16; i++)
+                {
+                    transformationMatrix[i] = float.Parse(transformData[i], CultureInfo.InvariantCulture);
+                }
+            }
 
             //a megfelelo taggel rendelkezo csomopontok kivevese
             XmlNodeList vertexNodes = doc.SelectNodes("//c:source[@id='Solid_001-mesh-positions']/c:float_array", namespaceManager);
@@ -139,7 +151,14 @@ namespace Szeminarium1_24_02_17_2
                     normal[1] = float.Parse(normalData[i + 1], CultureInfo.InvariantCulture);
                     normal[2] = float.Parse(normalData[i + 2], CultureInfo.InvariantCulture);
 
-                    objVertices.Add(vertex);
+                    float[] transformedVertex =
+                    [
+                        transformationMatrix[0] * vertex[0] + transformationMatrix[4] * vertex[1] + transformationMatrix[8] * vertex[2] + transformationMatrix[12],
+                        transformationMatrix[1] * vertex[0] + transformationMatrix[5] * vertex[1] + transformationMatrix[9] * vertex[2] + transformationMatrix[13],
+                        transformationMatrix[2] * vertex[0] + transformationMatrix[6] * vertex[1] + transformationMatrix[10] * vertex[2] + transformationMatrix[14],
+                    ];
+                    //objVertices.Add(vertex);
+                    objVertices.Add(transformedVertex);
                     objNormals.Add(normal);
                 }
             }
@@ -159,9 +178,9 @@ namespace Szeminarium1_24_02_17_2
                         facePosition[0] = int.Parse(faceData[i]);
                         faceNormal[0] = int.Parse(faceData[i + 1]);
                         facePosition[1] = int.Parse(faceData[i + 2]);
-                        faceNormal[0] = int.Parse(faceData[i + 3]);
+                        faceNormal[1] = int.Parse(faceData[i + 3]);
                         facePosition[2] = int.Parse(faceData[i + 4]);
-                        faceNormal[0] = int.Parse(faceData[i + 5]);
+                        faceNormal[2] = int.Parse(faceData[i + 5]);
                         objFacesPosition.Add(facePosition);
                         objFacesNormal.Add(faceNormal);
                     }
@@ -252,7 +271,6 @@ namespace Szeminarium1_24_02_17_2
                 }
             }
         }
-
 
         //szeminarium kod
         private static unsafe GlObject CreateOpenGlObject(GL Gl, uint vao, List<float> glVertices, List<float> glColors, List<uint> glIndices)

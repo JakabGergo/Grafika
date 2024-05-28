@@ -28,6 +28,7 @@ namespace Szeminarium1_24_02_17_2
         private static GlObject teapot;
         private static GlObject modelCube;
         private static GlObject colladaModelCube;
+        private static GlObject colladaBall;
 
 
         private static GlObject table;
@@ -253,6 +254,7 @@ namespace Szeminarium1_24_02_17_2
             DrawPulsingTeapot();
             DrawPulsingModelCube();
             DrawPulsingColladaModelCube();
+            DrawPulsingColladaBall();
 
             DrawRevolvingCube();
 
@@ -381,6 +383,21 @@ namespace Szeminarium1_24_02_17_2
             Gl.BindVertexArray(0);
         }
 
+        private static unsafe void DrawPulsingColladaBall()
+        {
+            // set material uniform to rubber
+            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(5, 1, 5));
+            var scaleForCenterCube = Matrix4X4.CreateScale((float)cubeArrangementModel.CenterCubeScale);
+            var pulsingScaleMatrix = Matrix4X4.CreateScale(1f);
+
+            var modelMatrixForCenterCube = pulsingScaleMatrix * scaleForCenterCube * translationForCenterCube;
+
+            SetModelMatrix(modelMatrixForCenterCube);
+            Gl.BindVertexArray(colladaBall.Vao);
+            Gl.DrawElements(GLEnum.Triangles, colladaBall.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+        }
+
         private static unsafe void SetModelMatrix(Matrix4X4<float> modelMatrix)
         {
             int location = Gl.GetUniformLocation(program, ModelMatrixVariableName);
@@ -422,9 +439,8 @@ namespace Szeminarium1_24_02_17_2
 
             teapot = ObjResourceReader.CreateTeapotWithColor(Gl, face1Color);
             modelCube = ObjResourceReader.CreateObjCubeWithColor(Gl, face2Color);
-            //colladaModelCube = ColladaResourceReader.CreateColladaCubeWithColor(Gl, face3Color);
-            colladaModelCube = ColladaResourceReader.CreateColladaBallWithColor(Gl, face3Color);
-            //teapot = ObjResourceReader.CreateObjCubeWithColor(Gl, face1Color);
+            colladaModelCube = ColladaResourceReader.CreateColladaCubeWithColor(Gl, face3Color);
+            colladaBall = ColladaResourceReader.CreateColladaBallWithColor(Gl, face3Color);
 
             float[] tableColor = [System.Drawing.Color.Azure.R/256f,
                                   System.Drawing.Color.Azure.G/256f,
@@ -442,6 +458,7 @@ namespace Szeminarium1_24_02_17_2
             teapot.ReleaseGlObject();
             modelCube.ReleaseGlObject();
             colladaModelCube.ReleaseGlObject();
+            colladaBall.ReleaseGlObject();
             glCubeRotating.ReleaseGlObject();
         }
 
