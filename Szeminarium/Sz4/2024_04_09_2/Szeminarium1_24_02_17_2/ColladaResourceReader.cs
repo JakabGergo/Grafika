@@ -31,7 +31,7 @@ namespace Szeminarium1_24_02_17_2
             return CreateOpenGlObject(Gl, vao, glVertices, glColors, glIndices);
         }
 
-        public static unsafe GlObject CreateColladaBallWithColor(GL Gl, float[] faceColor)
+        public static unsafe GlObject CreateColladaBallWithColor(GL Gl, float[] faceColor, float[] faceColor2)
         {
             uint vao = Gl.GenVertexArray();
             Gl.BindVertexArray(vao);
@@ -48,7 +48,7 @@ namespace Szeminarium1_24_02_17_2
             List<float> glColors = new List<float>();
             List<uint> glIndices = new List<uint>();
 
-            CreateGlArraysFromObjArraysNormals(faceColor, objVertices, glVertices, glColors, glIndices, objNormals, objFacesPosition, objFacesNormal);
+            CreateGlArraysFromObjArraysNormals(faceColor, faceColor2, objVertices, glVertices, glColors, glIndices, objNormals, objFacesPosition, objFacesNormal);
 
             return CreateOpenGlObject(Gl, vao, glVertices, glColors, glIndices);
         }
@@ -151,6 +151,7 @@ namespace Szeminarium1_24_02_17_2
                     normal[1] = float.Parse(normalData[i + 1], CultureInfo.InvariantCulture);
                     normal[2] = float.Parse(normalData[i + 2], CultureInfo.InvariantCulture);
 
+                    //transzformacio alkalmazasa a vertexekre
                     float[] transformedVertex =
                     [
                         transformationMatrix[0] * vertex[0] + transformationMatrix[4] * vertex[1] + transformationMatrix[8] * vertex[2] + transformationMatrix[12],
@@ -234,7 +235,7 @@ namespace Szeminarium1_24_02_17_2
             }
         }
 
-        private static unsafe void CreateGlArraysFromObjArraysNormals(float[] faceColor, List<float[]> objVertices, List<float> glVertices, List<float> glColors, List<uint> glIndices, List<float[]> objNormals, List<int[]> objFacesPosition, List<int[]> objFacesNormal)
+        private static unsafe void CreateGlArraysFromObjArraysNormals(float[] faceColor, float[] faceColor2, List<float[]> objVertices, List<float> glVertices, List<float> glColors, List<uint> glIndices, List<float[]> objNormals, List<int[]> objFacesPosition, List<int[]> objFacesNormal)
         {
             Dictionary<string, int> glVertexIndices = new Dictionary<string, int>();
 
@@ -262,7 +263,14 @@ namespace Szeminarium1_24_02_17_2
                     if (!glVertexIndices.ContainsKey(glVertexStringKey))
                     {
                         glVertices.AddRange(glVertex);
-                        glColors.AddRange(faceColor);
+                        if (j < 21720)
+                        {
+                            glColors.AddRange(faceColor);
+                        }
+                        else
+                        {
+                            glColors.AddRange(faceColor2);
+                        }
                         glVertexIndices.Add(glVertexStringKey, glVertexIndices.Count);
                     }
 

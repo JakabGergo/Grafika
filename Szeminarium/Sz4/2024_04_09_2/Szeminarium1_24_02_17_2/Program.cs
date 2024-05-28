@@ -440,7 +440,8 @@ namespace Szeminarium1_24_02_17_2
             teapot = ObjResourceReader.CreateTeapotWithColor(Gl, face1Color);
             modelCube = ObjResourceReader.CreateObjCubeWithColor(Gl, face2Color);
             colladaModelCube = ColladaResourceReader.CreateColladaCubeWithColor(Gl, face3Color);
-            colladaBall = ColladaResourceReader.CreateColladaBallWithColor(Gl, face3Color);
+            //fekete feher labda letrehozasa
+            colladaBall = ColladaResourceReader.CreateColladaBallWithColor(Gl, [1f, 1f, 1f, 1.0f], [0f, 0f, 0f, 1.0f]);
 
             float[] tableColor = [System.Drawing.Color.Azure.R/256f,
                                   System.Drawing.Color.Azure.G/256f,
