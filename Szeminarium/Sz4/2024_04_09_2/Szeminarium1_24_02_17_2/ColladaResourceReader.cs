@@ -262,6 +262,7 @@ namespace Szeminarium1_24_02_17_2
 
                     if (!glVertexIndices.ContainsKey(glVertexStringKey))
                     {
+                        //labda ketfele szinnel valo rajzolasa
                         glVertices.AddRange(glVertex);
                         if (j < 21720)
                         {
