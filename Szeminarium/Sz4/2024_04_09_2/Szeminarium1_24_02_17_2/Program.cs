@@ -27,6 +27,8 @@ namespace Szeminarium1_24_02_17_2
         //teaskanna letrehozasa
         private static GlObject teapot;
         private static GlObject modelCube;
+        private static GlObject colladaModelCube;
+
 
         private static GlObject table;
 
@@ -250,6 +252,7 @@ namespace Szeminarium1_24_02_17_2
 
             DrawPulsingTeapot();
             DrawPulsingModelCube();
+            DrawPulsingColladaModelCube();
 
             DrawRevolvingCube();
 
@@ -363,6 +366,21 @@ namespace Szeminarium1_24_02_17_2
             Gl.BindVertexArray(0);
         }
 
+        private static unsafe void DrawPulsingColladaModelCube()
+        {
+            // set material uniform to rubber
+            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(-5, 1, 0));
+            var scaleForCenterCube = Matrix4X4.CreateScale((float)cubeArrangementModel.CenterCubeScale);
+            var pulsingScaleMatrix = Matrix4X4.CreateScale(0.01f);
+
+            var modelMatrixForCenterCube = pulsingScaleMatrix * scaleForCenterCube * translationForCenterCube;
+            
+            SetModelMatrix(modelMatrixForCenterCube);
+            Gl.BindVertexArray(colladaModelCube.Vao);
+            Gl.DrawElements(GLEnum.Triangles, colladaModelCube.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+        }
+
         private static unsafe void SetModelMatrix(Matrix4X4<float> modelMatrix)
         {
             int location = Gl.GetUniformLocation(program, ModelMatrixVariableName);
@@ -404,6 +422,7 @@ namespace Szeminarium1_24_02_17_2
 
             teapot = ObjResourceReader.CreateTeapotWithColor(Gl, face1Color);
             modelCube = ObjResourceReader.CreateObjCubeWithColor(Gl, face2Color);
+            colladaModelCube = ColladaResourceReader.CreateColladaCubeWithColor(Gl, face3Color);
             //teapot = ObjResourceReader.CreateObjCubeWithColor(Gl, face1Color);
 
             float[] tableColor = [System.Drawing.Color.Azure.R/256f,
@@ -421,6 +440,7 @@ namespace Szeminarium1_24_02_17_2
         {
             teapot.ReleaseGlObject();
             modelCube.ReleaseGlObject();
+            colladaModelCube.ReleaseGlObject();
             glCubeRotating.ReleaseGlObject();
         }
 

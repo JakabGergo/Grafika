@@ -7,13 +7,11 @@ namespace Szeminarium1_24_02_17_2
     //objektumok olvasasa a resource mappabol
     internal class ObjResourceReader
     {
-
         public static unsafe GlObject CreateObjCubeWithColor(GL Gl, float[] faceColor)
         {
             uint vao = Gl.GenVertexArray();
             Gl.BindVertexArray(vao);
 
-            // ezekbe meg nincsenek normalisok
             List<float[]> objVertices;
             List<int[]> objFaces;
             List<int[]> objFacesNormal;

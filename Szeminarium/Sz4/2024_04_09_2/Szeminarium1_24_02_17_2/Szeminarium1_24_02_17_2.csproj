@@ -9,12 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\cube.dae" />
     <None Remove="Resources\cube.obj" />
     <None Remove="Resources\lamp.obj" />
     <None Remove="Resources\teapot.obj" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\cube.dae" />
     <EmbeddedResource Include="Resources\cube.obj" />
     <EmbeddedResource Include="Resources\teapot.obj" />
   </ItemGroup>
