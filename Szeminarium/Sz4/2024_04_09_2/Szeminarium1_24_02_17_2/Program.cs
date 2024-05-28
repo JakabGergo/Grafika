@@ -422,7 +422,8 @@ namespace Szeminarium1_24_02_17_2
 
             teapot = ObjResourceReader.CreateTeapotWithColor(Gl, face1Color);
             modelCube = ObjResourceReader.CreateObjCubeWithColor(Gl, face2Color);
-            colladaModelCube = ColladaResourceReader.CreateColladaCubeWithColor(Gl, face3Color);
+            //colladaModelCube = ColladaResourceReader.CreateColladaCubeWithColor(Gl, face3Color);
+            colladaModelCube = ColladaResourceReader.CreateColladaBallWithColor(Gl, face3Color);
             //teapot = ObjResourceReader.CreateObjCubeWithColor(Gl, face1Color);
 
             float[] tableColor = [System.Drawing.Color.Azure.R/256f,

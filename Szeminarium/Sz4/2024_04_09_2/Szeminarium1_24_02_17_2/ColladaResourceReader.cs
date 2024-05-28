@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -26,6 +27,28 @@ namespace Szeminarium1_24_02_17_2
             List<uint> glIndices = new List<uint>();
 
             CreateGlArraysFromObjArrays(faceColor, objVertices, objFaces, glVertices, glColors, glIndices);
+
+            return CreateOpenGlObject(Gl, vao, glVertices, glColors, glIndices);
+        }
+
+        public static unsafe GlObject CreateColladaBallWithColor(GL Gl, float[] faceColor)
+        {
+            uint vao = Gl.GenVertexArray();
+            Gl.BindVertexArray(vao);
+
+            List<float[]> objVertices;
+            List<int[]> objFacesPosition;
+            List<int[]> objFacesNormal;
+            List<float[]> objNormals;
+
+            ReadBallColladaData(out objVertices, out objNormals, out objFacesPosition, out objFacesNormal);
+
+            // itt rakunk normalist es szineket az objektumnak (mint eddig)
+            List<float> glVertices = new List<float>();
+            List<float> glColors = new List<float>();
+            List<uint> glIndices = new List<uint>();
+
+            CreateGlArraysFromObjArraysNormals(faceColor, objVertices, glVertices, glColors, glIndices, objNormals, objFacesPosition, objFacesNormal);
 
             return CreateOpenGlObject(Gl, vao, glVertices, glColors, glIndices);
         }
@@ -78,6 +101,74 @@ namespace Szeminarium1_24_02_17_2
             }
         }
 
+        private static unsafe void ReadBallColladaData(out List<float[]> objVertices, out List<float[]> objNormals, out List<int[]> objFacesPosition, out List<int[]> objFacesNormal)
+        {
+            objVertices = new List<float[]>();
+            objNormals = new List<float[]>();
+            objFacesPosition = new List<int[]>();
+            objFacesNormal = new List<int[]>();
+
+            // collada fajl kezelese mint xml dokumentum
+            XmlDocument doc = new XmlDocument();
+            doc.Load(@"D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz4\2024_04_09_2\Szeminarium1_24_02_17_2\Resources\ball.dae");
+
+            // ez kell ahhoz, hogy az xml fajlt megfeleloen tudjuk ertelmezni
+            XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
+            namespaceManager.AddNamespace("c", "http://www.collada.org/2005/11/COLLADASchema");
+
+            //a megfelelo taggel rendelkezo csomopontok kivevese
+            XmlNodeList vertexNodes = doc.SelectNodes("//c:source[@id='Solid_001-mesh-positions']/c:float_array", namespaceManager);
+            XmlNodeList normalNodes = doc.SelectNodes("//c:source[@id='Solid_001-mesh-normals']/c:float_array", namespaceManager);
+
+            if (vertexNodes != null && vertexNodes.Count > 0 && normalNodes != null && normalNodes.Count > 0)
+            {
+                // a kinyert csomopontban csak a pontok lesznek -> feldaraboljuk szokozok menten es 3-assaval elmentjuk
+                string[] vertexData = vertexNodes[0].InnerText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] normalData = normalNodes[0].InnerText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                for (int i = 0; i < vertexData.Length; i += 3)
+                {
+                    float[] vertex = new float[3];
+                    float[] normal = new float[3];
+
+                    vertex[0] = float.Parse(vertexData[i], CultureInfo.InvariantCulture);
+                    vertex[1] = float.Parse(vertexData[i + 1], CultureInfo.InvariantCulture);
+                    vertex[2] = float.Parse(vertexData[i + 2], CultureInfo.InvariantCulture);
+
+                    normal[0] = float.Parse(normalData[i], CultureInfo.InvariantCulture);
+                    normal[1] = float.Parse(normalData[i + 1], CultureInfo.InvariantCulture);
+                    normal[2] = float.Parse(normalData[i + 2], CultureInfo.InvariantCulture);
+
+                    objVertices.Add(vertex);
+                    objNormals.Add(normal);
+                }
+            }
+
+            // Olvassa be a face adatokat a megfelelo collada csomopontbol
+            XmlNodeList faceNodes = doc.SelectNodes("//c:polylist/c:p", namespaceManager);
+            if (faceNodes != null && faceNodes.Count > 0)
+            {
+                foreach (XmlNode faceNode in faceNodes)
+                {
+                    // ezek ugy vannak tarolva, hogy csucs, normalis, csucs, normalis, csucs, normalis, ... egy ilyen 3-as tesz ki egy face-t
+                    string[] faceData = faceNode.InnerText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < faceData.Length; i += 6)
+                    {
+                        int[] facePosition = new int[3];
+                        int[] faceNormal = new int[3];
+                        facePosition[0] = int.Parse(faceData[i]);
+                        faceNormal[0] = int.Parse(faceData[i + 1]);
+                        facePosition[1] = int.Parse(faceData[i + 2]);
+                        faceNormal[0] = int.Parse(faceData[i + 3]);
+                        facePosition[2] = int.Parse(faceData[i + 4]);
+                        faceNormal[0] = int.Parse(faceData[i + 5]);
+                        objFacesPosition.Add(facePosition);
+                        objFacesNormal.Add(faceNormal);
+                    }
+                }
+            }
+        }
+
         //szeminarium kod, csak itt az indexeles 0-tol volta a collada fajlba
         private static unsafe void CreateGlArraysFromObjArrays(float[] faceColor, List<float[]> objVertices, List<int[]> objFaces, List<float> glVertices, List<float> glColors, List<uint> glIndices)
         {
@@ -123,6 +214,45 @@ namespace Szeminarium1_24_02_17_2
                 }
             }
         }
+
+        private static unsafe void CreateGlArraysFromObjArraysNormals(float[] faceColor, List<float[]> objVertices, List<float> glVertices, List<float> glColors, List<uint> glIndices, List<float[]> objNormals, List<int[]> objFacesPosition, List<int[]> objFacesNormal)
+        {
+            Dictionary<string, int> glVertexIndices = new Dictionary<string, int>();
+
+            // Iterate through the faces
+            for (int j = 0; j < objFacesPosition.Count; j++)
+            {
+                var objFace = objFacesPosition[j];
+                var normalFace = objFacesNormal[j];
+
+                // Process 3 vertices per face
+                for (int i = 0; i < objFace.Length; ++i)
+                {
+                    // Vertex and corresponding normal
+                    var objVertex = objVertices[objFace[i]];
+                    var objNormal = objNormals[normalFace[i]];
+
+                    // Create GL description of vertex
+                    List<float> glVertex = new List<float>();
+                    glVertex.AddRange(objVertex);
+                    glVertex.AddRange(objNormal);
+
+                    // Convert to a unique string key
+                    var glVertexStringKey = string.Join(" ", glVertex);
+
+                    if (!glVertexIndices.ContainsKey(glVertexStringKey))
+                    {
+                        glVertices.AddRange(glVertex);
+                        glColors.AddRange(faceColor);
+                        glVertexIndices.Add(glVertexStringKey, glVertexIndices.Count);
+                    }
+
+                    // Add vertex to triangle indices
+                    glIndices.Add((uint)glVertexIndices[glVertexStringKey]);
+                }
+            }
+        }
+
 
         //szeminarium kod
         private static unsafe GlObject CreateOpenGlObject(GL Gl, uint vao, List<float> glVertices, List<float> glColors, List<uint> glIndices)
