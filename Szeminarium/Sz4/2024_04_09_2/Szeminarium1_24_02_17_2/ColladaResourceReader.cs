@@ -35,17 +35,20 @@ namespace Szeminarium1_24_02_17_2
             objVertices = new List<float[]>();
             objFaces = new List<int[]>();
 
+            // collada fajl kezelese mint xml dokumentum
             XmlDocument doc = new XmlDocument();
             doc.Load(@"D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz4\2024_04_09_2\Szeminarium1_24_02_17_2\Resources\cube.dae");
 
-            // ez kell ahhoz, hogy az xml fajlt megfeleloen tudjuk feldolgozni
+            // ez kell ahhoz, hogy az xml fajlt megfeleloen tudjuk ertelmezni
             XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
             namespaceManager.AddNamespace("c", "http://www.collada.org/2005/11/COLLADASchema");
 
+            //a megfelelo taggel rendelkezo csomopontok kivevese
             XmlNodeList vertexNodes = doc.SelectNodes("//c:source[@id='cube-vertex-positions']/c:float_array", namespaceManager);
             if (vertexNodes != null && vertexNodes.Count > 0)
             {
-                string[] vertexData = vertexNodes[0].InnerText.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                // a kinyert csomopontban csak a pontok lesznek -> feldaraboljuk szokozok menten es 3-assaval elmentjuk
+                string[] vertexData = vertexNodes[0].InnerText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < vertexData.Length; i += 3)
                 {
                     float[] vertex = new float[3];
@@ -56,19 +59,19 @@ namespace Szeminarium1_24_02_17_2
                 }
             }
 
-            // Olvassa be a face adatokat
+            // Olvassa be a face adatokat a megfelelo collada csomopontbol
             XmlNodeList faceNodes = doc.SelectNodes("//c:triangles/c:p", namespaceManager);
             if (faceNodes != null && faceNodes.Count > 0)
             {
                 foreach (XmlNode faceNode in faceNodes)
                 {
-                    string[] faceData = faceNode.InnerText.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                    for (int i = 0; i < faceData.Length; i+=3)
+                    string[] faceData = faceNode.InnerText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < faceData.Length; i += 3)
                     {
                         int[] face = new int[3];
                         face[0] = int.Parse(faceData[i]);
-                        face[1] = int.Parse(faceData[i+1]);
-                        face[2] = int.Parse(faceData[i+2]);
+                        face[1] = int.Parse(faceData[i + 1]);
+                        face[2] = int.Parse(faceData[i + 2]);
                         objFaces.Add(face);
                     }
                 }
