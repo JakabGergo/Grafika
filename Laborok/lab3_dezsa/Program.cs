@@ -130,36 +130,25 @@ namespace lab3_dezsa
         uniform mat4 uView;
         uniform mat4 uProjection;
 
-		out vec4 outCol;
-        out vec3 outNormal;
-        out vec3 outWorldPosition;
-        
-        void main()
-        {
-			outCol = vCol;
-            gl_Position = uProjection*uView*uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0);
-            outNormal = uNormal*vNorm;
-            outWorldPosition = vec3(uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0));
-        }
-        ";
-
-        private static readonly string FragmentShaderSourceGouard = @"
-        #version 330 core
-        
         uniform vec3 lightColor;
         uniform vec3 lightPos;
         uniform vec3 viewPos;
         uniform float shininess;
 
         out vec4 FragColor;
-
-		in vec4 outCol;
-        in vec3 outNormal;
-        in vec3 outWorldPosition;
-
+        
         void main()
         {
-            float ambientStrength = 0.5;
+            vec4 outCol;
+            vec3 outNormal;
+            vec3 outWorldPosition;
+
+            outCol = vCol;
+            gl_Position = uProjection*uView*uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0);
+            outNormal = uNormal*vNorm;
+            outWorldPosition = vec3(uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0));
+
+            float ambientStrength = 0.2;
             vec3 ambient = ambientStrength * lightColor;
 
             float diffuseStrength = 0.3;
@@ -172,10 +161,23 @@ namespace lab3_dezsa
             vec3 viewDir = normalize(viewPos - outWorldPosition);
             vec3 reflectDir = reflect(-lightDir, norm);
             float spec = sign(max(dot(norm, lightDir), 0)) * pow(max(dot(viewDir, reflectDir), 0.0), shininess) /max(dot(norm,viewDir), -dot(norm,lightDir));
-            vec3 specular = specularStrength * spec * lightColor;  
+            vec3 specular = specularStrength * spec * lightColor;
 
             vec3 result = (ambient + diffuse + specular) * outCol.xyz;
             FragColor = vec4(result, outCol.w);
+        }
+        ";
+
+        private static readonly string FragmentShaderSourceGouard = @"
+        #version 330 core
+        
+		out vec4 outFrag;
+         
+        in vec4 FragColor;
+
+        void main()
+        {
+            outFrag = FragColor;
         }
         ";
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Gouard arnyalas
