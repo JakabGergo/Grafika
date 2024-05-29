@@ -326,23 +326,25 @@ namespace lab3_dezsa
             Gl.Clear(ClearBufferMask.ColorBufferBit);
             Gl.Clear(ClearBufferMask.DepthBufferBit);
 
+            uint p;
             if (phongArnyalas)
             {
-                Gl.UseProgram(program);
+                p = program;
             }
             else
             {
-                Gl.UseProgram(programGourard);
+                p = programGourard;
             }
 
-            SetViewMatrix();
-            SetProjectionMatrix();
+            Gl.UseProgram(p);
+            SetViewMatrix(p);
+            SetProjectionMatrix(p);
 
             //feny szinenek beallitasa
-            SetLightColor();
-            SetLightPosition();
-            SetViewerPosition();
-            SetShininess();
+            SetLightColor(p);
+            SetLightPosition(p);
+            SetViewerPosition(p);
+            SetShininess(p);
 
             for(int i = 0; i < 18; i++)
             {
@@ -373,7 +375,7 @@ namespace lab3_dezsa
             controller.Render();
         }
 
-        private static unsafe void SetLightColor()
+        private static unsafe void SetLightColor(uint program)
         {
             int location = Gl.GetUniformLocation(program, LightColorVariableName);
 
@@ -386,7 +388,7 @@ namespace lab3_dezsa
             CheckError();
         }
 
-        private static unsafe void SetLightPosition()
+        private static unsafe void SetLightPosition(uint program)
         {
             int location = Gl.GetUniformLocation(program, LightPositionVariableName);
 
@@ -399,7 +401,7 @@ namespace lab3_dezsa
             CheckError();
         }
 
-        private static unsafe void SetViewerPosition()
+        private static unsafe void SetViewerPosition(uint program)
         {
             int location = Gl.GetUniformLocation(program, ViewPosVariableName);
 
@@ -412,7 +414,7 @@ namespace lab3_dezsa
             CheckError();
         }
 
-        private static unsafe void SetShininess()
+        private static unsafe void SetShininess(uint program)
         {
             int location = Gl.GetUniformLocation(program, ShininessVariableName);
 
@@ -492,7 +494,7 @@ namespace lab3_dezsa
             dezsa2.ReleaseDezsa();
         }
 
-        private static unsafe void SetProjectionMatrix()
+        private static unsafe void SetProjectionMatrix(uint program)
         {
             var projectionMatrix = Matrix4X4.CreatePerspectiveFieldOfView<float>((float)Math.PI / 4f, 1024f / 768f, 0.1f, 100);
             int location = Gl.GetUniformLocation(program, ProjectionMatrixVariableName);
@@ -506,7 +508,7 @@ namespace lab3_dezsa
             CheckError();
         }
 
-        private static unsafe void SetViewMatrix()
+        private static unsafe void SetViewMatrix(uint program)
         {
             var viewMatrix = Matrix4X4.CreateLookAt(cameraDescriptor.Position, cameraDescriptor.Target, cameraDescriptor.UpVector);
             int location = Gl.GetUniformLocation(program, ViewMatrixVariableName);

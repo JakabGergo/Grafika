@@ -14,8 +14,12 @@
       "DocumentGroups": [
         {
           "DockedHeight": 268,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +28,7 @@
               "RelativeDocumentMoniker": "Szeminarium1\\Program.cs",
               "ToolTip": "D:\\Egyetem\\2023-2024 masodev\\02_02_masodik felev\\Grafika\\Szeminarium\\Sz1\\Szeminarium1 - teljes solution\\Szeminarium1\\Szeminarium1\\Program.cs",
               "RelativeToolTip": "Szeminarium1\\Program.cs",
-              "ViewState": "AQIAACoBAAAAAAAAAAAkwDYBAAA7AAAA",
+              "ViewState": "AQIAACQBAAAAAAAAAAAkwDMBAAA0AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-28T08:30:55.818Z",
               "EditorCaption": ""

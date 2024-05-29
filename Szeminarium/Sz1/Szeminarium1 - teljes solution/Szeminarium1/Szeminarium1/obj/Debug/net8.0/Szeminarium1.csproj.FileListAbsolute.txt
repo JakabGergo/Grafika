@@ -46,3 +46,4 @@ D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz1\Szemina
 D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz1\Szeminarium1 - teljes solution\Szeminarium1\Szeminarium1\obj\Debug\net8.0\Szeminarium1.pdb
 D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz1\Szeminarium1 - teljes solution\Szeminarium1\Szeminarium1\obj\Debug\net8.0\Szeminarium1.genruntimeconfig.cache
 D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz1\Szeminarium1 - teljes solution\Szeminarium1\Szeminarium1\obj\Debug\net8.0\ref\Szeminarium1.dll
+D:\Egyetem\2023-2024 masodev\02_02_masodik felev\Grafika\Szeminarium\Sz1\Szeminarium1 - teljes solution\Szeminarium1\Szeminarium1\obj\Debug\net8.0\Szeminarium1.sourcelink.json
