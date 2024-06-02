@@ -9,12 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\kapu.obj" />
     <None Remove="Resources\skybox.png" />
     <None Remove="Shaders\FragmentShader.frag" />
     <None Remove="Shaders\VertexShader.vert" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\kapu.obj" />
     <EmbeddedResource Include="Resources\skybox.png" />
     <EmbeddedResource Include="Shaders\FragmentShader.frag" />
     <EmbeddedResource Include="Shaders\VertexShader.vert" />

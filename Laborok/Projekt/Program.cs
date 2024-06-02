@@ -4,6 +4,7 @@ using Silk.NET.OpenGL.Extensions.ImGui;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 using ImGuiNET;
+using System.Numerics;
 
 namespace Projekt
 {
@@ -22,6 +23,7 @@ namespace Projekt
         private static CameraDescriptor cameraDescriptor = new();
 
         private static GlObject colladaBall;
+        private static GlObject kapu;
 
         private static GlCube skyBox;
 
@@ -165,6 +167,7 @@ namespace Projekt
             SetShininess();
             
             DrawPulsingColladaBall();
+            DrawKapu();
             DrawSkyBox();
 
             //ImGuiNET.ImGui.ShowDemoWindow();
@@ -180,6 +183,7 @@ namespace Projekt
         private static void Window_Closing()
         {            
             colladaBall.ReleaseGlObject();
+            kapu.ReleaseGlObject();
         }
 
         private static unsafe void SetUpObjects()
@@ -194,6 +198,7 @@ namespace Projekt
 
             //fekete feher labda letrehozasa
             colladaBall = ColladaResourceReader.CreateColladaBallWithColor(Gl, [1f, 1f, 1f, 1.0f], [0f, 0f, 0f, 1.0f]);
+            kapu = ObjResourceReader.CreateObjKapuWithColor(Gl, [1f, 1f, 1f, 1.0f]);
 
             skyBox = GlCube.CreateInteriorCube(Gl, "");
         }
@@ -289,6 +294,22 @@ namespace Projekt
             SetModelMatrix(modelMatrixForCenterCube);
             Gl.BindVertexArray(colladaBall.Vao);
             Gl.DrawElements(GLEnum.Triangles, colladaBall.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+        }
+
+        private static unsafe void DrawKapu()
+        {
+            // set material uniform to rubber
+            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(3, 0, -10));
+            var pulsingScaleMatrix = Matrix4X4.CreateScale(0.025f);
+            var rotationYMatrix = Matrix4X4.CreateRotationY((float)Math.PI); // 180 fok = π radián
+
+
+            var modelMatrixForCenterCube = pulsingScaleMatrix * rotationYMatrix * translationForCenterCube;
+
+            SetModelMatrix(modelMatrixForCenterCube);
+            Gl.BindVertexArray(kapu.Vao);
+            Gl.DrawElements(GLEnum.Triangles, kapu.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
         }
 
