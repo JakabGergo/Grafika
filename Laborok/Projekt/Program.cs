@@ -332,7 +332,7 @@ namespace Projekt
         private static unsafe void DrawPulsingColladaBall()
         {
             // set material uniform to rubber
-            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 1, 5));
+            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 0, 0));
             var pulsingScaleMatrix = Matrix4X4.CreateScale(1f);
 
             var modelMatrixForCenterCube = pulsingScaleMatrix * translationForCenterCube;
