@@ -151,10 +151,10 @@ namespace Szeminarium1_24_02_17_2
         {
             // set up input handling
             inputContext = window.CreateInput();
-            foreach (var keyboard in inputContext.Keyboards)
-            {
+            //foreach (var keyboard in inputContext.Keyboards)
+            //{
                // keyboard.KeyDown += Keyboard_KeyDown;
-            }
+            //}
 
             Gl = window.CreateOpenGL();
 
