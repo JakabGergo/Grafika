@@ -23,6 +23,8 @@ namespace Projekt
 
         private static GlObject colladaBall;
 
+        private static GlCube skyBox;
+
         private const double AngleChangeStepSize = Math.PI / 180 * 2;
 
         private static float Shininess = 50;
@@ -31,6 +33,8 @@ namespace Projekt
         private const string NormalMatrixVariableName = "uNormal";
         private const string ViewMatrixVariableName = "uView";
         private const string ProjectionMatrixVariableName = "uProjection";
+
+        private const string TextureUniformVariableName = "uTexture";
 
         private const string LightColorVariableName = "lightColor";
         private const string LightPositionVariableName = "lightPos";
@@ -161,6 +165,7 @@ namespace Projekt
             SetShininess();
             
             DrawPulsingColladaBall();
+            DrawSkyBox();
 
             //ImGuiNET.ImGui.ShowDemoWindow();
             ImGuiNET.ImGui.Begin("Lighting properties",
@@ -190,10 +195,7 @@ namespace Projekt
             //fekete feher labda letrehozasa
             colladaBall = ColladaResourceReader.CreateColladaBallWithColor(Gl, [1f, 1f, 1f, 1.0f], [0f, 0f, 0f, 1.0f]);
 
-            float[] tableColor = [System.Drawing.Color.Azure.R/256f,
-                                  System.Drawing.Color.Azure.G/256f,
-                                  System.Drawing.Color.Azure.B/256f,
-                                  1f];
+            skyBox = GlCube.CreateInteriorCube(Gl, "");
         }
 
         private static unsafe void SetViewMatrix()
@@ -212,7 +214,7 @@ namespace Projekt
 
         private static unsafe void SetProjectionMatrix()
         {
-            var projectionMatrix = Matrix4X4.CreatePerspectiveFieldOfView<float>((float)Math.PI / 4f, 1024f / 768f, 0.1f, 100);
+            var projectionMatrix = Matrix4X4.CreatePerspectiveFieldOfView<float>((float)Math.PI / 4f, 1024f / 768f, 0.1f, 1000);
             int location = Gl.GetUniformLocation(program, ProjectionMatrixVariableName);
 
             if (location == -1)
@@ -288,6 +290,37 @@ namespace Projekt
             Gl.BindVertexArray(colladaBall.Vao);
             Gl.DrawElements(GLEnum.Triangles, colladaBall.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
+        }
+
+        private static unsafe void DrawSkyBox()
+        {
+            //ez egy nagy kocka lesz
+            Matrix4X4<float> modelMatrix = Matrix4X4.CreateScale(200f);
+            SetModelMatrix(modelMatrix);
+            Gl.BindVertexArray(skyBox.Vao);
+
+            // textura letrehozasa
+            int textureLocation = Gl.GetUniformLocation(program, TextureUniformVariableName);
+            if (textureLocation == -1)
+            {
+                throw new Exception($"{TextureUniformVariableName} uniform not found on shader.");
+            }
+            // set texture 0
+            Gl.Uniform1(textureLocation, 0);
+
+            //a skybox valtozoba betoltjuk a texturat
+            //taxtura aktivalas utan mindent az adott texturaval vegzunk
+            Gl.ActiveTexture(TextureUnit.Texture0);
+            Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (float)GLEnum.Linear);
+            Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (float)GLEnum.Linear);
+            Gl.BindTexture(TextureTarget.Texture2D, skyBox.Texture.Value);
+
+            Gl.DrawElements(GLEnum.Triangles, skyBox.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+
+            CheckError();
+            Gl.BindTexture(TextureTarget.Texture2D, 0);
+            CheckError();
         }
 
         private static unsafe void SetModelMatrix(Matrix4X4<float> modelMatrix)
