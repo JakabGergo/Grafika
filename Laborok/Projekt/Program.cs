@@ -314,12 +314,19 @@ namespace Projekt
 
         private static unsafe void DrawPulsingColladaBall()
         {
-            SetModelMatrix(ball.modelMatrix);
+            var translation = Matrix4X4.CreateTranslation(ball.position);
+            var rotationX = Matrix4X4.CreateRotationX(ball.rotationAngleX);
+            var rotationZ = Matrix4X4.CreateRotationZ(ball.rotationAngleZ);
+
+            var modelMatrixForBall = ball.modelMatrix * rotationX * rotationZ * translation;
+
+            SetModelMatrix(modelMatrixForBall);
             Gl.BindVertexArray(ball.glBall.Vao);
             Gl.DrawElements(GLEnum.Triangles, ball.glBall.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
 
             var modelMatrixForTable = Matrix4X4.CreateScale(1f, 1f, 1f);
+
             SetModelMatrix(modelMatrixForTable);
             Gl.BindVertexArray(table.Vao);
             Gl.DrawElements(GLEnum.Triangles, table.IndexArrayLength, GLEnum.UnsignedInt, null);
@@ -428,6 +435,26 @@ namespace Projekt
             if (keyboard.IsKeyPressed(Key.D)) { cameraDescriptor.StrafeLeft(0.4f); }
             if (keyboard.IsKeyPressed(Key.W)) { cameraDescriptor.MoveForward(0.4f); }
             if (keyboard.IsKeyPressed(Key.S)) { cameraDescriptor.MoveBackward(0.4f); }
+            if (keyboard.IsKeyPressed(Key.I))
+            {
+                ball.rotationAngleX += (float)(-Math.PI / 10);
+                ball.position += new Vector3D<float>(0, 0, -0.3f);
+            }
+            if (keyboard.IsKeyPressed(Key.K))
+            {
+                ball.rotationAngleX += (float)(Math.PI / 10);
+                ball.position += new Vector3D<float>(0, 0, 0.3f);
+            }
+            if (keyboard.IsKeyPressed(Key.J))
+            {
+                ball.rotationAngleZ += (float)(Math.PI / 10);
+                ball.position += new Vector3D<float>(-0.3f, 0, 0);
+            }
+            if (keyboard.IsKeyPressed(Key.L))
+            {
+                ball.rotationAngleZ += (float)(-Math.PI / 10);
+                ball.position += new Vector3D<float>(0.3f, 0, 0);
+            }
         }
 
         private static void Keyboard_KeyDown(IKeyboard keyboard, Key key, int arg3)
