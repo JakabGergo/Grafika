@@ -23,6 +23,7 @@ namespace Projekt
         private static CameraDescriptor cameraDescriptor = new();
 
         private static GlObject colladaBall;
+        private static Ball ball;
         private static GlObject kapu;
         private static GlObject kapu2;
         private static GlObject table;
@@ -213,7 +214,12 @@ namespace Projekt
             float[] face6Color = [1.0f, 1.0f, 0.0f, 1.0f];
 
             //fekete feher labda letrehozasa
+            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 1, 0));
+            var pulsingScaleMatrix = Matrix4X4.CreateScale(1f);
+            var modelMatrixForCenterCube = pulsingScaleMatrix * translationForCenterCube;
             colladaBall = ColladaResourceReader.CreateColladaBallWithColor(Gl, [1f, 1f, 1f, 1.0f], [0f, 0f, 0f, 1.0f]);
+            ball = new Ball(colladaBall, 0f, 1f, 0f, modelMatrixForCenterCube);
+            
             kapu = ObjResourceReader.CreateObjKapuWithColor(Gl, [1f, 1f, 1f, 1.0f]);
             kapu2 = ObjResourceReader.CreateObjKapuWithColor(Gl, [1f, 1f, 1f, 1.0f]);
 
@@ -308,15 +314,9 @@ namespace Projekt
 
         private static unsafe void DrawPulsingColladaBall()
         {
-            // set material uniform to rubber
-            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 1, 0));
-            var pulsingScaleMatrix = Matrix4X4.CreateScale(1f);
-
-            var modelMatrixForCenterCube = pulsingScaleMatrix * translationForCenterCube;
-
-            SetModelMatrix(modelMatrixForCenterCube);
-            Gl.BindVertexArray(colladaBall.Vao);
-            Gl.DrawElements(GLEnum.Triangles, colladaBall.IndexArrayLength, GLEnum.UnsignedInt, null);
+            SetModelMatrix(ball.modelMatrix);
+            Gl.BindVertexArray(ball.glBall.Vao);
+            Gl.DrawElements(GLEnum.Triangles, ball.glBall.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
 
             var modelMatrixForTable = Matrix4X4.CreateScale(1f, 1f, 1f);
@@ -329,14 +329,13 @@ namespace Projekt
         private static unsafe void DrawKapu()
         {
             // set material uniform to rubber
-            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(5.5f, 0, -10));
+            var translationForGoal = Matrix4X4.CreateTranslation(new Vector3D<float>(5.5f, 0, -10));
             var pulsingScaleMatrix = Matrix4X4.CreateScale(0.025f);
             var rotationYMatrix = Matrix4X4.CreateRotationY((float)Math.PI);
 
+            var modelMatrixForGoal = pulsingScaleMatrix * rotationYMatrix * translationForGoal;
 
-            var modelMatrixForCenterCube = pulsingScaleMatrix * rotationYMatrix * translationForCenterCube;
-
-            SetModelMatrix(modelMatrixForCenterCube);
+            SetModelMatrix(modelMatrixForGoal);
             Gl.BindVertexArray(kapu.Vao);
             Gl.DrawElements(GLEnum.Triangles, kapu.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
