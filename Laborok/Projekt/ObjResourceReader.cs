@@ -272,31 +272,43 @@ namespace Projekt
                                 faceTexture[i] = int.Parse(indices[1], CultureInfo.InvariantCulture);
                                 faceNormal[i] = int.Parse(indices[2], CultureInfo.InvariantCulture);
                             }
-                            //ide mentjuk a csomopontokat es a masikba a hozzajuk tartozo normalisokat
+                            // Add the first triangle
                             objFaces.Add(face);
                             objFacesTexture.Add(faceTexture);
                             objFacesNormal.Add(faceNormal);
 
                             if (lineData.Length > 3)
                             {
-                                int k = 0;
-                                for (int i = 0; i < lineData.Length; ++i)
+                                for (int i = 2; i < lineData.Length - 1; ++i)
                                 {
-                                    if (i != 1)
-                                    {
-                                        string[] indices = lineData[k].Split('/');
-                                        face[k] = int.Parse(indices[0], CultureInfo.InvariantCulture);
-                                        faceTexture[k] = int.Parse(indices[1], CultureInfo.InvariantCulture);
-                                        faceNormal[k] = int.Parse(indices[2], CultureInfo.InvariantCulture);
-                                        k++;
-                                    }
+                                    int[] additionalFace = new int[3];
+                                    int[] additionalFaceTexture = new int[3];
+                                    int[] additionalFaceNormal = new int[3];
+
+                                    string[] indices1 = lineData[0].Split('/');
+                                    string[] indices2 = lineData[i].Split('/');
+                                    string[] indices3 = lineData[i + 1].Split('/');
+
+                                    additionalFace[0] = int.Parse(indices1[0], CultureInfo.InvariantCulture);
+                                    additionalFace[1] = int.Parse(indices2[0], CultureInfo.InvariantCulture);
+                                    additionalFace[2] = int.Parse(indices3[0], CultureInfo.InvariantCulture);
+
+                                    additionalFaceTexture[0] = int.Parse(indices1[1], CultureInfo.InvariantCulture);
+                                    additionalFaceTexture[1] = int.Parse(indices2[1], CultureInfo.InvariantCulture);
+                                    additionalFaceTexture[2] = int.Parse(indices3[1], CultureInfo.InvariantCulture);
+
+                                    additionalFaceNormal[0] = int.Parse(indices1[2], CultureInfo.InvariantCulture);
+                                    additionalFaceNormal[1] = int.Parse(indices2[2], CultureInfo.InvariantCulture);
+                                    additionalFaceNormal[2] = int.Parse(indices3[2], CultureInfo.InvariantCulture);
+
+                                    // Add the additional triangle
+                                    objFaces.Add(additionalFace);
+                                    objFacesTexture.Add(additionalFaceTexture);
+                                    objFacesNormal.Add(additionalFaceNormal);
                                 }
-                                //ide mentjuk a csomopontokat es a masikba a hozzajuk tartozo normalisokat
-                                objFaces.Add(face);
-                                objFacesTexture.Add(faceTexture);
-                                objFacesNormal.Add(faceNormal);
                             }
                             break;
+
                         case "vn":
                             float[] normal = new float[3];
                             for (int i = 0; i < normal.Length; ++i)
