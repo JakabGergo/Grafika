@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Xml;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -117,6 +115,36 @@ namespace Projekt
                         objFacesPosition.Add(facePosition);
                         objFacesNormal.Add(faceNormal);
                     }
+                }
+            }
+            // Calculate dimensions
+            float minX = float.MaxValue, maxX = float.MinValue;
+            float minY = float.MaxValue, maxY = float.MinValue;
+            float minZ = float.MaxValue, maxZ = float.MinValue;
+
+            foreach (var vertex in objVertices)
+            {
+                if (vertex[0] < minX) minX = vertex[0];
+                if (vertex[0] > maxX) maxX = vertex[0];
+                if (vertex[1] < minY) minY = vertex[1];
+                if (vertex[1] > maxY) maxY = vertex[1];
+                if (vertex[2] < minZ) minZ = vertex[2];
+                if (vertex[2] > maxZ) maxZ = vertex[2];
+            }
+
+            // Calculate the radius
+            float radius = 0;
+            foreach (var vertex in objVertices)
+            {
+                float distance = MathF.Sqrt(
+                    MathF.Pow(vertex[0], 2) +
+                    MathF.Pow(vertex[1], 2) +
+                    MathF.Pow(vertex[2], 2)
+                );
+
+                if (distance > radius)
+                {
+                    radius = distance;
                 }
             }
         }

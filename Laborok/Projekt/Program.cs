@@ -214,11 +214,12 @@ namespace Projekt
             float[] face6Color = [1.0f, 1.0f, 0.0f, 1.0f];
 
             //fekete feher labda letrehozasa
-            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 1, 0));
+            //+-1.02310574f ez a legmagasabb es legalacsonyabb Y koordinata
+            var translationForBall = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 1.02310574f, 0));
             var pulsingScaleMatrix = Matrix4X4.CreateScale(1f);
-            var modelMatrixForCenterCube = pulsingScaleMatrix * translationForCenterCube;
+            var modelMatrixForBall = pulsingScaleMatrix * translationForBall;
             colladaBall = ColladaResourceReader.CreateColladaBallWithColor(Gl, [1f, 1f, 1f, 1.0f], [0f, 0f, 0f, 1.0f]);
-            ball = new Ball(colladaBall, 0f, 1f, 0f, modelMatrixForCenterCube);
+            ball = new Ball(colladaBall, 0f, 1f, 0f, modelMatrixForBall);
             
             kapu = ObjResourceReader.CreateObjKapuWithColor(Gl, [1f, 1f, 1f, 1.0f]);
             kapu2 = ObjResourceReader.CreateObjKapuWithColor(Gl, [1f, 1f, 1f, 1.0f]);
