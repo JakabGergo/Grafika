@@ -25,6 +25,7 @@ namespace Projekt
         private static GlObject colladaBall;
         private static GlObject kapu;
         private static GlObject kapu2;
+        private static GlObject table;
 
         private static GlCube skyBox;
 
@@ -205,6 +206,12 @@ namespace Projekt
             kapu2 = ObjResourceReader.CreateObjKapuWithColor(Gl, [1f, 1f, 1f, 1.0f]);
 
             skyBox = GlCube.CreateInteriorCube(Gl, "");
+
+            float[] tableColor = [82f / 256f,   // Red component
+                                  110f / 256f,  // Green component
+                                  35f / 256f,   // Blue component
+                                  1f];
+            table = GlCube.CreateSquare(Gl, tableColor);
         }
 
         private static unsafe void SetViewMatrix()
@@ -257,7 +264,7 @@ namespace Projekt
                 throw new Exception($"{LightPositionVariableName} uniform not found on shader.");
             }
 
-            Gl.Uniform3(location, 0f, 10f, 0f);
+            Gl.Uniform3(location, 0f, 1000f, 0f);
             CheckError();
         }
 
@@ -290,7 +297,7 @@ namespace Projekt
         private static unsafe void DrawPulsingColladaBall()
         {
             // set material uniform to rubber
-            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 0, 0));
+            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 1, 0));
             var pulsingScaleMatrix = Matrix4X4.CreateScale(1f);
 
             var modelMatrixForCenterCube = pulsingScaleMatrix * translationForCenterCube;
@@ -298,6 +305,12 @@ namespace Projekt
             SetModelMatrix(modelMatrixForCenterCube);
             Gl.BindVertexArray(colladaBall.Vao);
             Gl.DrawElements(GLEnum.Triangles, colladaBall.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+
+            var modelMatrixForTable = Matrix4X4.CreateScale(1f, 1f, 1f);
+            SetModelMatrix(modelMatrixForTable);
+            Gl.BindVertexArray(table.Vao);
+            Gl.DrawElements(GLEnum.Triangles, table.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
         }
 
@@ -334,7 +347,7 @@ namespace Projekt
         private static unsafe void DrawSkyBox()
         {
             //ez egy nagy kocka lesz
-            Matrix4X4<float> modelMatrix = Matrix4X4.CreateScale(500f);
+            Matrix4X4<float> modelMatrix = Matrix4X4.CreateScale(800f);
             SetModelMatrix(modelMatrix);
             Gl.BindVertexArray(skyBox.Vao);
 

@@ -163,6 +163,7 @@ namespace Projekt
                     if (!glVertexIndices.ContainsKey(glVertexStringKey))
                     {
                         glVertices.AddRange(glVertex);
+                        glColors.AddRange(faceColor);
                         glVertexIndices.Add(glVertexStringKey, glVertexIndices.Count);
                     }
 

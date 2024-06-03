@@ -16,7 +16,7 @@ in vec2 outTex;
 
 void main()
 {
-    float ambientStrength = 0.2;
+    float ambientStrength = 0.75;
     vec3 ambient = ambientStrength * lightColor;
 
     float diffuseStrength = 0.3;

@@ -13,6 +13,7 @@
     <None Remove="Resources\skybox.jpeg" />
     <None Remove="Resources\skybox.jpg" />
     <None Remove="Resources\skybox.png" />
+    <None Remove="Resources\Soccergoal.obj" />
     <None Remove="Shaders\FragmentShader.frag" />
     <None Remove="Shaders\VertexShader.vert" />
   </ItemGroup>
@@ -21,6 +22,7 @@
     <EmbeddedResource Include="Resources\kapu.obj" />
     <EmbeddedResource Include="Resources\skybox.jpeg" />
     <EmbeddedResource Include="Resources\skybox.png" />
+    <EmbeddedResource Include="Resources\Soccergoal.obj" />
     <EmbeddedResource Include="Shaders\FragmentShader.frag" />
     <EmbeddedResource Include="Shaders\VertexShader.vert" />
   </ItemGroup>
