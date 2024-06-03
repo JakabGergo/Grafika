@@ -11,8 +11,7 @@ namespace Projekt
         public float y;
         public float z;
 
-        public float rotationAngleX = 0;
-        public float rotationAngleZ = 0;
+        public Matrix4X4<float> rotationMatrix = Matrix4X4<float>.Identity;
 
         public Vector3D<float> position = new Vector3D<float>(0, 0, 0);
 
