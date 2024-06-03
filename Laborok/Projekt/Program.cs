@@ -29,6 +29,8 @@ namespace Projekt
 
         private static GlCube skyBox;
 
+        private static bool felsoNezet = true;
+
         private const double AngleChangeStepSize = Math.PI / 180 * 2;
 
         private static float Shininess = 50;
@@ -177,8 +179,18 @@ namespace Projekt
             ImGuiNET.ImGui.Begin("Lighting properties",
                 ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
             ImGuiNET.ImGui.SliderFloat("Shininess", ref Shininess, 1, 200);
-            ImGuiNET.ImGui.End();
 
+            ImGuiNET.ImGui.RadioButton("Felso nezet", felsoNezet);
+            if (ImGuiNET.ImGui.IsItemClicked())
+            {
+                felsoNezet = true;
+            }
+            ImGuiNET.ImGui.RadioButton("Koveto nezet", !felsoNezet);
+            if (ImGuiNET.ImGui.IsItemClicked())
+            {
+                felsoNezet = false;
+            }
+            ImGuiNET.ImGui.End();
 
             controller.Render();
         }
