@@ -334,7 +334,7 @@ namespace Projekt
         private static unsafe void DrawSkyBox()
         {
             //ez egy nagy kocka lesz
-            Matrix4X4<float> modelMatrix = Matrix4X4.CreateScale(200f);
+            Matrix4X4<float> modelMatrix = Matrix4X4.CreateScale(500f);
             SetModelMatrix(modelMatrix);
             Gl.BindVertexArray(skyBox.Vao);
 
