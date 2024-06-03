@@ -157,14 +157,12 @@ namespace Projekt
                     List<float> glVertex = new List<float>();
                     glVertex.AddRange(objVertex);
                     glVertex.AddRange(objNormal);
-                    //glVertex.AddRange(objT);
 
                     // check if vertex exists
                     var glVertexStringKey = string.Join(" ", glVertex);
                     if (!glVertexIndices.ContainsKey(glVertexStringKey))
                     {
                         glVertices.AddRange(glVertex);
-                        glColors.AddRange(faceColor);
                         glVertexIndices.Add(glVertexStringKey, glVertexIndices.Count);
                     }
 
@@ -262,11 +260,11 @@ namespace Projekt
                             break;
                         case "f":
                             //igy vannak leirva facek
-                            //f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
+                            //f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3 v4/vt4/vn4
                             int[] face = new int[3];
                             int[] faceTexture = new int[3];
                             int[] faceNormal = new int[3];
-                            for (int i = 0; i < face.Length; ++i)
+                            for (int i = 0; i < 3; ++i)
                             {
                                 string[] indices = lineData[i].Split('/');
                                 face[i] = int.Parse(indices[0], CultureInfo.InvariantCulture);
@@ -277,6 +275,26 @@ namespace Projekt
                             objFaces.Add(face);
                             objFacesTexture.Add(faceTexture);
                             objFacesNormal.Add(faceNormal);
+
+                            if (lineData.Length > 3)
+                            {
+                                int k = 0;
+                                for (int i = 0; i < lineData.Length; ++i)
+                                {
+                                    if (i != 1)
+                                    {
+                                        string[] indices = lineData[k].Split('/');
+                                        face[k] = int.Parse(indices[0], CultureInfo.InvariantCulture);
+                                        faceTexture[k] = int.Parse(indices[1], CultureInfo.InvariantCulture);
+                                        faceNormal[k] = int.Parse(indices[2], CultureInfo.InvariantCulture);
+                                        k++;
+                                    }
+                                }
+                                //ide mentjuk a csomopontokat es a masikba a hozzajuk tartozo normalisokat
+                                objFaces.Add(face);
+                                objFacesTexture.Add(faceTexture);
+                                objFacesNormal.Add(faceNormal);
+                            }
                             break;
                         case "vn":
                             float[] normal = new float[3];

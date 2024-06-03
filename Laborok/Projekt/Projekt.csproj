@@ -20,7 +20,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\kapu.obj" />
     <EmbeddedResource Include="Resources\skybox.jpeg" />
-    <EmbeddedResource Include="Resources\skybox.jpg" />
     <EmbeddedResource Include="Resources\skybox.png" />
     <EmbeddedResource Include="Shaders\FragmentShader.frag" />
     <EmbeddedResource Include="Shaders\VertexShader.vert" />
