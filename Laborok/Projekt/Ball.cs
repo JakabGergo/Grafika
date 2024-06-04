@@ -13,7 +13,7 @@ namespace Projekt
 
         public Matrix4X4<float> rotationMatrix = Matrix4X4<float>.Identity;
 
-        public Vector3D<float> position = new Vector3D<float>(0, 1.02310574f, 19);
+        public Vector3D<float> position = new Vector3D<float>(0, 1.02310574f, 17);
 
         public Matrix4X4<float> modelMatrix;
 

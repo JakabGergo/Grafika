@@ -259,6 +259,7 @@ namespace Projekt
                 float tav = (float)Math.Sqrt(Math.Pow(players[i].x - ball.position.X, 2) + Math.Pow(players[i].z - ball.position.Z, 2));
                 if (tav < 1)
                 {
+                    cameraDescriptor.PositionKoveto = new Vector3D<float>(0, 3, 22);
                     ball.position.X = 0;
                     ball.position.Y = 1.02310574f;
                     ball.position.Z = 17;

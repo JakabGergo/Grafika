@@ -6,7 +6,7 @@ namespace Projekt
     {
         private Vector3D<float> lookDirection = new Vector3D<float>(0, 0, -1);
         private Vector3D<float> position = new Vector3D<float>(0,2,7);
-        private Vector3D<float> positionKoveto = new Vector3D<float>(0,3,26);
+        private Vector3D<float> positionKoveto = new Vector3D<float>(0,3,22);
         private Vector3D<float> felsoNezet = new Vector3D<float>(0f, 74f, 17f);
         private Vector3D<float> target = new Vector3D<float>(0,0,0);
         private Vector3D<float> upVector = new Vector3D<float>(0,1,0);
@@ -27,6 +27,10 @@ namespace Projekt
             get
             {
                 return positionKoveto;
+            }
+            set
+            {
+                positionKoveto = value;
             }
         }
 
