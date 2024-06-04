@@ -465,13 +465,13 @@ namespace Projekt
         private static unsafe void DrawWallS()
         {
 
-            float[] transX = { -20,  20, 9.5f};
-            float[] transY = { -20,  -20, -16};
-            float[] transZ = {  13f, -10, -22.5f};
-            float[] rotAngle = { (float)(Math.PI) / 2, (float)(-Math.PI / 2), (float)(Math.PI) };
-            float[] scale = { 12, 12, 10 };
+            float[] transX = { -20,  20, 9.5f, 9.5f };
+            float[] transY = { -20,  -20, -16, -16 };
+            float[] transZ = {  13f, -10, -22.5f, 22.5f };
+            float[] rotAngle = { (float)(Math.PI) / 2, (float)(-Math.PI / 2), (float)(Math.PI), (float)(Math.PI)};
+            float[] scale = { 11, 11.5f, 10, 10 };
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 var translationForPlayer = Matrix4X4.CreateTranslation(new Vector3D<float>(transX[i], transY[i], transZ[i]));
                 var rotY = Matrix4X4.CreateRotationY(rotAngle[i]);
