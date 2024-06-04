@@ -31,6 +31,8 @@ namespace Projekt
         private static GlCube skyBox;
 
         private static bool felsoNezet = true;
+        private static bool fejlesztoiNezet = false;
+        private static bool labdakovetoNezet = false;
 
         private const double AngleChangeStepSize = Math.PI / 180 * 2;
 
@@ -183,15 +185,26 @@ namespace Projekt
                 ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
             ImGuiNET.ImGui.SliderFloat("Shininess", ref Shininess, 1, 200);
 
+
+            ImGuiNET.ImGui.RadioButton("Fejlesztoi nezet", fejlesztoiNezet);
+            if (ImGuiNET.ImGui.IsItemClicked()){
+                fejlesztoiNezet = true;
+                felsoNezet = false;
+                labdakovetoNezet = false;
+            }
             ImGuiNET.ImGui.RadioButton("Felso nezet", felsoNezet);
             if (ImGuiNET.ImGui.IsItemClicked())
             {
+                fejlesztoiNezet = false;
                 felsoNezet = true;
+                labdakovetoNezet = false;
             }
-            ImGuiNET.ImGui.RadioButton("Koveto nezet", !felsoNezet);
+            ImGuiNET.ImGui.RadioButton("Labda koveto nezet", labdakovetoNezet);
             if (ImGuiNET.ImGui.IsItemClicked())
             {
+                fejlesztoiNezet = false;
                 felsoNezet = false;
+                labdakovetoNezet = true;
             }
             ImGuiNET.ImGui.End();
 
@@ -237,9 +250,12 @@ namespace Projekt
 
         private static unsafe void SetViewMatrix()
         {
+            //fejlesztoi nezet
             var viewMatrix = Matrix4X4.CreateLookAt(cameraDescriptor.Position, cameraDescriptor.Target, cameraDescriptor.UpVector);
-
             if (felsoNezet)
+            {
+                viewMatrix = Matrix4X4.CreateLookAt(cameraDescriptor.FelsoNezet, Vector3D<float>.Zero, cameraDescriptor.UpVector);
+            }else if (labdakovetoNezet)
             {
                 viewMatrix = Matrix4X4.CreateLookAt(cameraDescriptor.FelsoNezet, Vector3D<float>.Zero, cameraDescriptor.UpVector);
             }
@@ -307,8 +323,14 @@ namespace Projekt
                 Gl.Uniform3(location, cameraDescriptor.FelsoNezet.X, cameraDescriptor.FelsoNezet.Y, cameraDescriptor.FelsoNezet.Z);
                 CheckError();
             }
+            else if(fejlesztoiNezet) 
+            {
+                Gl.Uniform3(location, cameraDescriptor.Position.X, cameraDescriptor.Position.Y, cameraDescriptor.Position.Z);
+                CheckError();
+            }
             else
             {
+                //koveto nezet
                 Gl.Uniform3(location, cameraDescriptor.Position.X, cameraDescriptor.Position.Y, cameraDescriptor.Position.Z);
                 CheckError();
             }
