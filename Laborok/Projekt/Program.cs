@@ -464,12 +464,11 @@ namespace Projekt
 
         private static unsafe void DrawWallS()
         {
-
             float[] transX = { -20,  20, 9.5f, 9.5f };
-            float[] transY = { -20,  -20, -16, -16 };
-            float[] transZ = {  13f, -10, -22.5f, 22.5f };
+            float[] transY = { -18.8f, -18.8f, -16, -16 };
+            float[] transZ = {  11f, -11, -22.5f, 22.5f };
             float[] rotAngle = { (float)(Math.PI) / 2, (float)(-Math.PI / 2), (float)(Math.PI), (float)(Math.PI)};
-            float[] scale = { 11, 11.5f, 10, 10 };
+            float[] scale = { 11.4f, 11.4f, 10, 10 };
 
             for (int i = 0; i < 4; i++)
             {
@@ -585,14 +584,20 @@ namespace Projekt
             if (keyboard.IsKeyPressed(Key.I))
             {
                 ball.rotationMatrix *= Matrix4X4.CreateRotationX((float)(-Math.PI / 25));
-                ball.position += new Vector3D<float>(0, 0, -0.3f);
-                cameraDescriptor.updatePositionKoveto(new Vector3D<float>(0, 0, -0.3f));
+                if (ball.position.Z >= -21.6)
+                {
+                    ball.position += new Vector3D<float>(0, 0, -0.3f);
+                    cameraDescriptor.updatePositionKoveto(new Vector3D<float>(0, 0, -0.3f));
+                }
             }
             if (keyboard.IsKeyPressed(Key.K))
             {
                 ball.rotationMatrix *= Matrix4X4.CreateRotationX((float)(Math.PI / 25));
-                ball.position += new Vector3D<float>(0, 0, 0.3f);
-                cameraDescriptor.updatePositionKoveto(new Vector3D<float>(0, 0, 0.3f));
+                if (ball.position.Z <= 21.6f)
+                {
+                    ball.position += new Vector3D<float>(0, 0, 0.3f);
+                    cameraDescriptor.updatePositionKoveto(new Vector3D<float>(0, 0, 0.3f));
+                }
             }
             if (keyboard.IsKeyPressed(Key.J))
             {
