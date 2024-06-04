@@ -477,11 +477,11 @@ namespace Projekt
                 throw new Exception($"{TextureUniformVariableName} uniform not found on shader.");
             }
             // set texture 0
-            Gl.Uniform1(textureLocation, 0);
+            Gl.Uniform1(textureLocation, 1);
 
             //a skybox valtozoba betoltjuk a texturat
             //taxtura aktivalas utan mindent az adott texturaval vegzunk
-            Gl.ActiveTexture(TextureUnit.Texture0);
+            Gl.ActiveTexture(TextureUnit.Texture1);
             Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (float)GLEnum.Linear);
             Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (float)GLEnum.Linear);
             Gl.BindTexture(TextureTarget.Texture2D, wall.Texture.Value);

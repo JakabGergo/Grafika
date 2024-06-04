@@ -133,16 +133,12 @@ namespace Projekt
                 Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, vertexSize, (void*)offsetNormal);
 
                 uint colors = Gl.GenBuffer();
-                //Gl.BindBuffer(GLEnum.ArrayBuffer, colors);
-                //Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)glColors.ToArray().AsSpan(), GLEnum.StaticDraw);
-                //Gl.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, null);
-                //Gl.EnableVertexAttribArray(1);
-
+                
                 // set texture
                 // create texture
                 uint texture = Gl.GenTexture();
                 // activate texture 0
-                Gl.ActiveTexture(TextureUnit.Texture0);
+                Gl.ActiveTexture(TextureUnit.Texture1);
                 // bind texture
                 Gl.BindTexture(TextureTarget.Texture2D, texture);
 
