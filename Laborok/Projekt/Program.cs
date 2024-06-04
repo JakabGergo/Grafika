@@ -200,10 +200,26 @@ namespace Projekt
             {
                 if (i == 0 || (i >= 3 && i <= 7))
                 {
+                    if (balra)
+                    {
+                        players[i].x += 0.25f;
+                    }
+                    else
+                    {
+                        players[i].x -= 0.25f;
+                    }
                     DrawPlayer(players[i], true);
                 }
                 else 
-                { 
+                {
+                    if (balra)
+                    {
+                        players[i].x -= 0.25f;
+                    }
+                    else
+                    {
+                        players[i].x += 0.25f;
+                    }
                     DrawPlayer(players[i], false); 
                 }
             }
@@ -238,7 +254,20 @@ namespace Projekt
             }
             ImGuiNET.ImGui.End();
 
-            controller.Render();
+            for (int i = 0; i < players.Count; i++)
+            {
+                float tav = (float)Math.Sqrt(Math.Pow(players[i].x - ball.position.X, 2) + Math.Pow(players[i].z - ball.position.Z, 2));
+                if (tav < 1)
+                {
+                    ball.position.X = 0;
+                    ball.position.Y = 1.02310574f;
+                    ball.position.Z = 17;
+                }
+            }
+
+
+
+                controller.Render();
         }
 
         private static void Window_Closing()
