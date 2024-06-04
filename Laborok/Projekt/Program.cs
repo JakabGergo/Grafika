@@ -29,6 +29,8 @@ namespace Projekt
         private static GlObject table;
         private static List<Player> players;
 
+
+        private static GlObject wall;
         private static GlCube skyBox;
 
         private static bool felsoNezet = true;
@@ -205,6 +207,7 @@ namespace Projekt
                     DrawPlayer(players[i], false); 
                 }
             }
+            DrawWall();
             DrawSkyBox();
 
             //ImGuiNET.ImGui.ShowDemoWindow();
@@ -287,6 +290,7 @@ namespace Projekt
             }
 
             skyBox = GlCube.CreateInteriorCube(Gl, "");
+            wall = ObjResourceReader.CreateObjWallWithColor(Gl, face6Color);
 
             float[] tableColor = [82f / 256f,   // Red component
                                   110f / 256f,  // Green component
@@ -456,6 +460,38 @@ namespace Projekt
             Gl.BindVertexArray(player.glPlayer.Vao);
             Gl.DrawElements(GLEnum.Triangles, player.glPlayer.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
+        }
+
+        private static unsafe void DrawWall()
+        {
+            //ez egy nagy kocka lesz
+            var translationForPlayer = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 10, 0));
+            Matrix4X4<float> modelMatrix = Matrix4X4.CreateScale(5f);
+            SetModelMatrix(modelMatrix * translationForPlayer);
+            Gl.BindVertexArray(wall.Vao);
+
+            // textura letrehozasa
+            int textureLocation = Gl.GetUniformLocation(program, TextureUniformVariableName);
+            if (textureLocation == -1)
+            {
+                throw new Exception($"{TextureUniformVariableName} uniform not found on shader.");
+            }
+            // set texture 0
+            Gl.Uniform1(textureLocation, 0);
+
+            //a skybox valtozoba betoltjuk a texturat
+            //taxtura aktivalas utan mindent az adott texturaval vegzunk
+            Gl.ActiveTexture(TextureUnit.Texture0);
+            Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (float)GLEnum.Linear);
+            Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (float)GLEnum.Linear);
+            Gl.BindTexture(TextureTarget.Texture2D, wall.Texture.Value);
+
+            Gl.DrawElements(GLEnum.Triangles, wall.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+
+            CheckError();
+            Gl.BindTexture(TextureTarget.Texture2D, 0);
+            CheckError();
         }
 
         private static unsafe void DrawSkyBox()

@@ -191,7 +191,7 @@ namespace Projekt
                     var objVertex = objVertices[objFace[i] - 1];
                     //es a hozza tartozo normalis
                     var objNormal = objNormals[objFacesNormal[j][i] - 1];
-                    var objT = objTexture[objFacesTexture[j][i] - 1];
+                    //var objT = objTexture[objFacesTexture[j][i] - 1];
 
                     // create gl description of vertex
                     List<float> glVertex = new List<float>();
@@ -310,10 +310,13 @@ namespace Projekt
                             objNormals.Add(normal);
                             break;
                         case "vt":
-                            float[] texture = new float[3];
-                            for (int i = 0; i < texture.Length; ++i)
-                                texture[i] = float.Parse(lineData[i], CultureInfo.InvariantCulture);
-                            objTexture.Add(texture);
+                            if (lineData.Length > 2)
+                            {
+                                float[] texture = new float[3];
+                                for (int i = 0; i < texture.Length; ++i)
+                                    texture[i] = float.Parse(lineData[i], CultureInfo.InvariantCulture);
+                                objTexture.Add(texture);
+                            }
                             break;
                         default:
                             throw new Exception("Unexpected obj component.");
@@ -328,7 +331,7 @@ namespace Projekt
             //fuggoseg behozasa a kep betoltesere
             ImageResult result;
             using (Stream skyeboxStream
-                = typeof(GlCube).Assembly.GetManifestResourceStream("Szeminarium1_24_02_17_2.Resources." + textureResource))
+                = typeof(GlCube).Assembly.GetManifestResourceStream("Projekt.Resources." + textureResource))
                 result = ImageResult.FromStream(skyeboxStream, ColorComponents.RedGreenBlueAlpha);
 
             return result;
