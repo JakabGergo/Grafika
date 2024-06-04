@@ -56,7 +56,7 @@ namespace Projekt
         {
             WindowOptions windowOptions = WindowOptions.Default;
             windowOptions.Title = "Projekt";
-            windowOptions.Size = new Vector2D<int>(500, 500);
+            windowOptions.Size = new Vector2D<int>(800, 800);
 
             // on some systems there is no depth buffer by default, so we need to make sure one is created
             windowOptions.PreferredDepthBufferBits = 24;
@@ -255,9 +255,9 @@ namespace Projekt
             if (felsoNezet)
             {
                 viewMatrix = Matrix4X4.CreateLookAt(cameraDescriptor.FelsoNezet, Vector3D<float>.Zero, cameraDescriptor.UpVector);
-            }else if (labdakovetoNezet)
+            } else if (labdakovetoNezet)
             {
-                viewMatrix = Matrix4X4.CreateLookAt(cameraDescriptor.FelsoNezet, Vector3D<float>.Zero, cameraDescriptor.UpVector);
+                viewMatrix = Matrix4X4.CreateLookAt(cameraDescriptor.PositionKoveto, ball.position, cameraDescriptor.UpVector);
             }
             int location = Gl.GetUniformLocation(program, ViewMatrixVariableName);
 
@@ -331,7 +331,7 @@ namespace Projekt
             else
             {
                 //koveto nezet
-                Gl.Uniform3(location, cameraDescriptor.Position.X, cameraDescriptor.Position.Y, cameraDescriptor.Position.Z);
+                Gl.Uniform3(location, cameraDescriptor.PositionKoveto.X, cameraDescriptor.PositionKoveto.Y, cameraDescriptor.PositionKoveto.Z);
                 CheckError();
             }
         }
@@ -460,7 +460,7 @@ namespace Projekt
 
         private static void Keyboard_KeyPressed(IKeyboard keyboard)
         {
-            if (!felsoNezet)
+            if (fejlesztoiNezet)
             {
                 if (keyboard.IsKeyPressed(Key.Left)) { cameraDescriptor.RotateAroundY(AngleChangeStepSize); }
                 if (keyboard.IsKeyPressed(Key.Left)) { cameraDescriptor.RotateAroundY(AngleChangeStepSize); }
@@ -479,21 +479,25 @@ namespace Projekt
             {
                 ball.rotationMatrix *= Matrix4X4.CreateRotationX((float)(-Math.PI / 25));
                 ball.position += new Vector3D<float>(0, 0, -0.3f);
+                cameraDescriptor.updatePositionKoveto(new Vector3D<float>(0, 0, -0.3f));
             }
             if (keyboard.IsKeyPressed(Key.K))
             {
                 ball.rotationMatrix *= Matrix4X4.CreateRotationX((float)(Math.PI / 25));
                 ball.position += new Vector3D<float>(0, 0, 0.3f);
+                cameraDescriptor.updatePositionKoveto(new Vector3D<float>(0, 0, 0.3f));
             }
             if (keyboard.IsKeyPressed(Key.J))
             {
                 ball.rotationMatrix *= Matrix4X4.CreateRotationZ((float)(Math.PI / 25));
                 ball.position += new Vector3D<float>(-0.3f, 0, 0);
+                cameraDescriptor.updatePositionKoveto(new Vector3D<float>(-0.3f, 0, 0));
             }
             if (keyboard.IsKeyPressed(Key.L))
             {
                 ball.rotationMatrix *= Matrix4X4.CreateRotationZ((float)(-Math.PI / 25));
                 ball.position += new Vector3D<float>(0.3f, 0, 0);
+                cameraDescriptor.updatePositionKoveto(new Vector3D<float>(0.3f, 0, 0));
             }
         }
 

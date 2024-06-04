@@ -6,6 +6,7 @@ namespace Projekt
     {
         private Vector3D<float> lookDirection = new Vector3D<float>(0, 0, -1);
         private Vector3D<float> position = new Vector3D<float>(0,2,7);
+        private Vector3D<float> positionKoveto = new Vector3D<float>(0,3,26);
         private Vector3D<float> felsoNezet = new Vector3D<float>(0f, 74f, 17f);
         private Vector3D<float> target = new Vector3D<float>(0,0,0);
         private Vector3D<float> upVector = new Vector3D<float>(0,1,0);
@@ -19,6 +20,23 @@ namespace Projekt
             {
                 return position;
             }
+        }
+
+        public Vector3D<float> PositionKoveto
+        {
+            get
+            {
+                return positionKoveto;
+            }
+        }
+
+        private static Vector3D<float> GetPointFromAngles(double distanceToOrigin, double angleToMinZYPlane, double angleToMinZXPlane)
+        {
+            var x = distanceToOrigin * Math.Cos(angleToMinZXPlane) * Math.Sin(angleToMinZYPlane);
+            var z = distanceToOrigin * Math.Cos(angleToMinZXPlane) * Math.Cos(angleToMinZYPlane);
+            var y = distanceToOrigin * Math.Sin(angleToMinZXPlane);
+
+            return new Vector3D<float>((float)x, (float)y, (float)z);
         }
 
         public Vector3D <float> FelsoNezet
@@ -50,6 +68,11 @@ namespace Projekt
                 target = position + lookDirection;
                 return target;
             }
+        }
+
+        public void updatePositionKoveto(Vector3D<float> position)
+        {
+            positionKoveto += position;
         }
 
         public void StrafeLeft(float distance)
