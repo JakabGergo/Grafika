@@ -5,7 +5,8 @@ namespace Projekt
     internal class CameraDescriptor
     {
         private Vector3D<float> lookDirection = new Vector3D<float>(0, 0, -1);
-        private Vector3D<float> position = new Vector3D<float>(0,0,7);
+        private Vector3D<float> position = new Vector3D<float>(0,2,7);
+        private Vector3D<float> felsoNezet = new Vector3D<float>(0f, 74f, 17f);
         private Vector3D<float> target = new Vector3D<float>(0,0,0);
         private Vector3D<float> upVector = new Vector3D<float>(0,1,0);
 
@@ -17,6 +18,14 @@ namespace Projekt
             get
             {
                 return position;
+            }
+        }
+
+        public Vector3D <float> FelsoNezet
+        {
+            get
+            {
+                return felsoNezet;
             }
         }
 

@@ -238,6 +238,11 @@ namespace Projekt
         private static unsafe void SetViewMatrix()
         {
             var viewMatrix = Matrix4X4.CreateLookAt(cameraDescriptor.Position, cameraDescriptor.Target, cameraDescriptor.UpVector);
+
+            if (felsoNezet)
+            {
+                viewMatrix = Matrix4X4.CreateLookAt(cameraDescriptor.FelsoNezet, Vector3D<float>.Zero, cameraDescriptor.UpVector);
+            }
             int location = Gl.GetUniformLocation(program, ViewMatrixVariableName);
 
             if (location == -1)
@@ -297,9 +302,16 @@ namespace Projekt
             {
                 throw new Exception($"{ViewPosVariableName} uniform not found on shader.");
             }
-
-            Gl.Uniform3(location, cameraDescriptor.Position.X, cameraDescriptor.Position.Y, cameraDescriptor.Position.Z);
-            CheckError();
+            if (felsoNezet)
+            {
+                Gl.Uniform3(location, cameraDescriptor.FelsoNezet.X, cameraDescriptor.FelsoNezet.Y, cameraDescriptor.FelsoNezet.Z);
+                CheckError();
+            }
+            else
+            {
+                Gl.Uniform3(location, cameraDescriptor.Position.X, cameraDescriptor.Position.Y, cameraDescriptor.Position.Z);
+                CheckError();
+            }
         }
 
         private static unsafe void SetShininess()
@@ -426,17 +438,21 @@ namespace Projekt
 
         private static void Keyboard_KeyPressed(IKeyboard keyboard)
         {
-            if (keyboard.IsKeyPressed(Key.Left)) { cameraDescriptor.RotateAroundY(AngleChangeStepSize); }
-            if (keyboard.IsKeyPressed(Key.Left)) { cameraDescriptor.RotateAroundY(AngleChangeStepSize); }
-            if (keyboard.IsKeyPressed(Key.Right)) { cameraDescriptor.RotateAroundY(-AngleChangeStepSize); }
-            if (keyboard.IsKeyPressed(Key.Down)) { cameraDescriptor.RotateAroundX(-AngleChangeStepSize); }
-            if (keyboard.IsKeyPressed(Key.Up)) { cameraDescriptor.RotateAroundX(AngleChangeStepSize); }
-            if (keyboard.IsKeyPressed(Key.Q)) { cameraDescriptor.MoveUp(0.5f); }
-            if (keyboard.IsKeyPressed(Key.E)) { cameraDescriptor.MoveDown(0.5f); }
-            if (keyboard.IsKeyPressed(Key.A)) { cameraDescriptor.StrafeRight(0.4f); }
-            if (keyboard.IsKeyPressed(Key.D)) { cameraDescriptor.StrafeLeft(0.4f); }
-            if (keyboard.IsKeyPressed(Key.W)) { cameraDescriptor.MoveForward(0.4f); }
-            if (keyboard.IsKeyPressed(Key.S)) { cameraDescriptor.MoveBackward(0.4f); }
+            if (!felsoNezet)
+            {
+                if (keyboard.IsKeyPressed(Key.Left)) { cameraDescriptor.RotateAroundY(AngleChangeStepSize); }
+                if (keyboard.IsKeyPressed(Key.Left)) { cameraDescriptor.RotateAroundY(AngleChangeStepSize); }
+                if (keyboard.IsKeyPressed(Key.Right)) { cameraDescriptor.RotateAroundY(-AngleChangeStepSize); }
+                if (keyboard.IsKeyPressed(Key.Down)) { cameraDescriptor.RotateAroundX(-AngleChangeStepSize); }
+                if (keyboard.IsKeyPressed(Key.Up)) { cameraDescriptor.RotateAroundX(AngleChangeStepSize); }
+                if (keyboard.IsKeyPressed(Key.Q)) { cameraDescriptor.MoveUp(0.5f); }
+                if (keyboard.IsKeyPressed(Key.E)) { cameraDescriptor.MoveDown(0.5f); }
+                if (keyboard.IsKeyPressed(Key.A)) { cameraDescriptor.StrafeRight(0.4f); }
+                if (keyboard.IsKeyPressed(Key.D)) { cameraDescriptor.StrafeLeft(0.4f); }
+                if (keyboard.IsKeyPressed(Key.W)) { cameraDescriptor.MoveForward(0.4f); }
+                if (keyboard.IsKeyPressed(Key.S)) { cameraDescriptor.MoveBackward(0.4f); }
+            }
+            
             if (keyboard.IsKeyPressed(Key.I))
             {
                 ball.rotationMatrix *= Matrix4X4.CreateRotationX((float)(-Math.PI / 25));
