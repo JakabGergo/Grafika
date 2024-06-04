@@ -318,7 +318,8 @@ namespace Projekt
         private static unsafe void DrawPulsingColladaBall()
         {
             var translation = Matrix4X4.CreateTranslation(ball.position);
-            var modelMatrixForBall = ball.modelMatrix * ball.rotationMatrix * translation;
+            var pulsingScaleMatrix = Matrix4X4.CreateScale(0.5f);
+            var modelMatrixForBall = ball.modelMatrix * pulsingScaleMatrix * ball.rotationMatrix * translation;
 
             modelMatrixForBall.M42 = LabdaMagassag;
             SetModelMatrix(modelMatrixForBall);
