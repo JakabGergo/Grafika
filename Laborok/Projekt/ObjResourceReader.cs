@@ -19,9 +19,33 @@ namespace Projekt
             List<float[]> objNormals;
             List<float[]> objTexture;
 
+            // beolvassuk az objektumot
+            ReadObjDataWithNormalsAndTexture(out objVertices, out objFaces, out objNormals, out objFacesNormal, out objFacesTexture, out objTexture, "kapu.obj");
+
+            // itt rakunk normalist es szineket az objektumnak (mint eddig)
+            List<float> glVertices = new List<float>();
+            List<float> glColors = new List<float>();
+            List<uint> glIndices = new List<uint>();
+
+            CreateGlArraysFromObjArraysNormals(faceColor, objVertices, objFaces, glVertices, glColors, glIndices, objNormals, objFacesNormal, objFacesTexture, objTexture);
+
+            return CreateOpenGlObject(Gl, vao, glVertices, glColors, glIndices);
+        }
+
+        public static unsafe GlObject CreateObjPlayerWithColor(GL Gl, float[] faceColor)
+        {
+            uint vao = Gl.GenVertexArray();
+            Gl.BindVertexArray(vao);
+
+            List<float[]> objVertices;
+            List<int[]> objFaces;
+            List<int[]> objFacesNormal;
+            List<int[]> objFacesTexture;
+            List<float[]> objNormals;
+            List<float[]> objTexture;
 
             // beolvassuk az objektumot
-            ReadObjDataWithNormalsAndTexture(out objVertices, out objFaces, out objNormals, out objFacesNormal, out objFacesTexture, out objTexture);
+            ReadObjDataWithNormalsAndTexture(out objVertices, out objFaces, out objNormals, out objFacesNormal, out objFacesTexture, out objTexture, "player.obj");
 
             // itt rakunk normalist es szineket az objektumnak (mint eddig)
             List<float> glVertices = new List<float>();
@@ -220,7 +244,7 @@ namespace Projekt
             }
         }
 
-        private static unsafe void ReadObjDataWithNormalsAndTexture(out List<float[]> objVertices, out List<int[]> objFaces, out List<float[]> objNormals, out List<int[]> objFacesNormal, out List<int[]> objFacesTexture, out List<float[]> objTexture)
+        private static unsafe void ReadObjDataWithNormalsAndTexture(out List<float[]> objVertices, out List<int[]> objFaces, out List<float[]> objNormals, out List<int[]> objFacesNormal, out List<int[]> objFacesTexture, out List<float[]> objTexture, string fajlnev)
         {
             //objektum leirasanak beolvasasa
             objVertices = new List<float[]>();
@@ -231,7 +255,7 @@ namespace Projekt
             objTexture = new List<float[]>();
 
             //azert van zarojelbe, hogy hiba eseten alljon le
-            using (Stream objStream = typeof(ObjResourceReader).Assembly.GetManifestResourceStream("Projekt.Resources.kapu.obj"))
+            using (Stream objStream = typeof(ObjResourceReader).Assembly.GetManifestResourceStream("Projekt.Resources." + fajlnev))
             using (StreamReader objReader = new StreamReader(objStream))
             {
                 while (!objReader.EndOfStream)

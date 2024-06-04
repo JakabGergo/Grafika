@@ -27,6 +27,7 @@ namespace Projekt
         private static GlObject kapu;
         private static GlObject kapu2;
         private static GlObject table;
+        private static List<Player> players;
 
         private static GlCube skyBox;
 
@@ -35,6 +36,8 @@ namespace Projekt
         private static bool labdakovetoNezet = false;
 
         private const double AngleChangeStepSize = Math.PI / 180 * 2;
+        private static float oldalraEltolas = 0.25f;
+        private static bool balra = true;
 
         public const float LabdaMagassag = 1.02310574f;
 
@@ -178,6 +181,30 @@ namespace Projekt
             DrawPulsingColladaBall();
             DrawKapu();
             DrawKapu2();
+            if (balra)
+            {
+                oldalraEltolas += 0.25f;
+            }
+            else
+            {
+                oldalraEltolas -= 0.25f;
+            }
+            if(Math.Abs(oldalraEltolas) >= 7)
+            {
+                balra = !balra;
+            }
+
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (i == 0 || (i >= 3 && i <= 7))
+                {
+                    DrawPlayer(players[i], true);
+                }
+                else 
+                { 
+                    DrawPlayer(players[i], false); 
+                }
+            }
             DrawSkyBox();
 
             //ImGuiNET.ImGui.ShowDemoWindow();
@@ -216,6 +243,10 @@ namespace Projekt
             colladaBall.ReleaseGlObject();
             kapu.ReleaseGlObject();
             kapu2.ReleaseGlObject();
+            for(int i = 0; i < players.Count; i++)
+            {
+                players[i].glPlayer.ReleaseGlObject();
+            }
         }
 
         private static unsafe void SetUpObjects()
@@ -238,6 +269,22 @@ namespace Projekt
             
             kapu = ObjResourceReader.CreateObjKapuWithColor(Gl, [1f, 1f, 1f, 1.0f]);
             kapu2 = ObjResourceReader.CreateObjKapuWithColor(Gl, [1f, 1f, 1f, 1.0f]);
+            
+            GlObject player = ObjResourceReader.CreateObjPlayerWithColor(Gl, face1Color);
+            float[] xIndex = { -0.5f,  5,   -5, -11.5f, -6f,  -0.5f, 6f,  11.5f, -7.5f, -0.5f, 6.5f};
+            float[] zIndex = {   -18, -10, -10,   -2,    -2,     -2, -2,     -2,     6,     6,    6};
+
+            var pulsingScaleMatrixForPlayer = Matrix4X4.CreateScale(0.03f);
+            var rotationYMatrix = Matrix4X4.CreateRotationX((float)(-Math.PI / 2));
+            var translationForPlayer = Matrix4X4.CreateTranslation(new Vector3D<float>(xIndex[0], 0, zIndex[0]));
+
+            players = new List<Player>();
+            players.Add(new Player(player, xIndex[0], 0, zIndex[0], pulsingScaleMatrixForPlayer * rotationYMatrix * translationForPlayer));
+            for (int i = 1; i < 11; i++)
+            {
+                translationForPlayer = Matrix4X4.CreateTranslation(new Vector3D<float>(xIndex[i], 0, zIndex[i]));
+                players.Add(new Player(player, xIndex[i], 0, zIndex[i], pulsingScaleMatrixForPlayer * rotationYMatrix * translationForPlayer));
+            }
 
             skyBox = GlCube.CreateInteriorCube(Gl, "");
 
@@ -395,6 +442,19 @@ namespace Projekt
             SetModelMatrix(modelMatrixForCenterCube);
             Gl.BindVertexArray(kapu2.Vao);
             Gl.DrawElements(GLEnum.Triangles, kapu2.IndexArrayLength, GLEnum.UnsignedInt, null);
+            Gl.BindVertexArray(0);
+        }
+
+        private static unsafe void DrawPlayer(Player player, bool jobbra)
+        {
+            var translationForPlayer = Matrix4X4.CreateTranslation(new Vector3D<float>(-oldalraEltolas, 0, 0));
+            if (jobbra)
+            {
+                translationForPlayer = Matrix4X4.CreateTranslation(new Vector3D<float>(oldalraEltolas, 0, 0));
+            }
+            SetModelMatrix(player.modelMatrix * translationForPlayer);
+            Gl.BindVertexArray(player.glPlayer.Vao);
+            Gl.DrawElements(GLEnum.Triangles, player.glPlayer.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
         }
 
