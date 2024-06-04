@@ -34,6 +34,8 @@ namespace Projekt
 
         private const double AngleChangeStepSize = Math.PI / 180 * 2;
 
+        public const float LabdaMagassag = 1.02310574f;
+
         private static float Shininess = 50;
 
         private const string ModelMatrixVariableName = "uModel";
@@ -215,7 +217,7 @@ namespace Projekt
 
             //fekete feher labda letrehozasa
             //+-1.02310574f ez a legmagasabb es legalacsonyabb Y koordinata
-            var translationForBall = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 1.02310574f, 0));
+            var translationForBall = Matrix4X4.CreateTranslation(new Vector3D<float>(0, LabdaMagassag, 0));
             var pulsingScaleMatrix = Matrix4X4.CreateScale(1f);
             var modelMatrixForBall = pulsingScaleMatrix * translationForBall;
             colladaBall = ColladaResourceReader.CreateColladaBallWithColor(Gl, [1f, 1f, 1f, 1.0f], [0f, 0f, 0f, 1.0f]);
@@ -318,6 +320,7 @@ namespace Projekt
             var translation = Matrix4X4.CreateTranslation(ball.position);
             var modelMatrixForBall = ball.modelMatrix * ball.rotationMatrix * translation;
 
+            modelMatrixForBall.M42 = LabdaMagassag;
             SetModelMatrix(modelMatrixForBall);
             Gl.BindVertexArray(ball.glBall.Vao);
             Gl.DrawElements(GLEnum.Triangles, ball.glBall.IndexArrayLength, GLEnum.UnsignedInt, null);
@@ -334,7 +337,7 @@ namespace Projekt
         private static unsafe void DrawKapu()
         {
             // set material uniform to rubber
-            var translationForGoal = Matrix4X4.CreateTranslation(new Vector3D<float>(5.5f, 0, -10));
+            var translationForGoal = Matrix4X4.CreateTranslation(new Vector3D<float>(5.5f, 0, -20));
             var pulsingScaleMatrix = Matrix4X4.CreateScale(0.025f);
             var rotationYMatrix = Matrix4X4.CreateRotationY((float)Math.PI);
 
@@ -349,7 +352,7 @@ namespace Projekt
         private static unsafe void DrawKapu2()
         {
             // set material uniform to rubber
-            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(-7, 0, 10));
+            var translationForCenterCube = Matrix4X4.CreateTranslation(new Vector3D<float>(-7, 0, 20));
             var pulsingScaleMatrix = Matrix4X4.CreateScale(0.025f);
 
             var modelMatrixForCenterCube = pulsingScaleMatrix * translationForCenterCube;
@@ -435,22 +438,22 @@ namespace Projekt
             if (keyboard.IsKeyPressed(Key.S)) { cameraDescriptor.MoveBackward(0.4f); }
             if (keyboard.IsKeyPressed(Key.I))
             {
-                ball.rotationMatrix *= Matrix4X4.CreateRotationX((float)(-Math.PI / 10));
+                ball.rotationMatrix *= Matrix4X4.CreateRotationX((float)(-Math.PI / 25));
                 ball.position += new Vector3D<float>(0, 0, -0.3f);
             }
             if (keyboard.IsKeyPressed(Key.K))
             {
-                ball.rotationMatrix *= Matrix4X4.CreateRotationX((float)(Math.PI / 10));
+                ball.rotationMatrix *= Matrix4X4.CreateRotationX((float)(Math.PI / 25));
                 ball.position += new Vector3D<float>(0, 0, 0.3f);
             }
             if (keyboard.IsKeyPressed(Key.J))
             {
-                ball.rotationMatrix *= Matrix4X4.CreateRotationZ((float)(Math.PI / 10));
+                ball.rotationMatrix *= Matrix4X4.CreateRotationZ((float)(Math.PI / 25));
                 ball.position += new Vector3D<float>(-0.3f, 0, 0);
             }
             if (keyboard.IsKeyPressed(Key.L))
             {
-                ball.rotationMatrix *= Matrix4X4.CreateRotationZ((float)(-Math.PI / 10));
+                ball.rotationMatrix *= Matrix4X4.CreateRotationZ((float)(-Math.PI / 25));
                 ball.position += new Vector3D<float>(0.3f, 0, 0);
             }
         }
