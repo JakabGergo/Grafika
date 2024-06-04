@@ -467,7 +467,7 @@ namespace Projekt
 
             float[] transX = { -20,  20, 9.5f};
             float[] transY = { -20,  -20, -16};
-            float[] transZ = {  12, -10, -20};
+            float[] transZ = {  13f, -10, -22.5f};
             float[] rotAngle = { (float)(Math.PI) / 2, (float)(-Math.PI / 2), (float)(Math.PI) };
             float[] scale = { 12, 12, 10 };
 
