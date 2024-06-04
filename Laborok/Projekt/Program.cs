@@ -41,7 +41,7 @@ namespace Projekt
         private static float oldalraEltolas = 0.25f;
         private static bool balra = true;
 
-        public const float LabdaMagassag = 1.02310574f;
+        public const float LabdaMagassag = (1.02310574f)/2;
 
         private static float Shininess = 50;
 
@@ -207,7 +207,7 @@ namespace Projekt
                     DrawPlayer(players[i], false); 
                 }
             }
-            DrawWall();
+            DrawWallS();
             DrawSkyBox();
 
             //ImGuiNET.ImGui.ShowDemoWindow();
@@ -274,8 +274,8 @@ namespace Projekt
             kapu2 = ObjResourceReader.CreateObjKapuWithColor(Gl, [1f, 1f, 1f, 1.0f]);
             
             GlObject player = ObjResourceReader.CreateObjPlayerWithColor(Gl, face1Color);
-            float[] xIndex = { -0.5f,  5,   -5, -11.5f, -6f,  -0.5f, 6f,  11.5f, -7.5f, -0.5f, 6.5f};
-            float[] zIndex = {   -18, -10, -10,   -2,    -2,     -2, -2,     -2,     6,     6,    6};
+            float[] xIndex = {  -0.5f,   5,   -5, -11.5f, -6f,  -0.5f, 6f,  11.5f, -7.5f, -0.5f, 6.5f};
+            float[] zIndex = { -17.5f, -10, -10,   -2,    -2,     -2, -2,     -2,     6,     6,    6};
 
             var pulsingScaleMatrixForPlayer = Matrix4X4.CreateScale(0.03f);
             var rotationYMatrix = Matrix4X4.CreateRotationX((float)(-Math.PI / 2));
@@ -462,36 +462,47 @@ namespace Projekt
             Gl.BindVertexArray(0);
         }
 
-        private static unsafe void DrawWall()
+        private static unsafe void DrawWallS()
         {
-            //ez egy nagy kocka lesz
-            var translationForPlayer = Matrix4X4.CreateTranslation(new Vector3D<float>(0, 10, 0));
-            Matrix4X4<float> modelMatrix = Matrix4X4.CreateScale(5f);
-            SetModelMatrix(modelMatrix * translationForPlayer);
-            Gl.BindVertexArray(wall.Vao);
 
-            // textura letrehozasa
-            int textureLocation = Gl.GetUniformLocation(program, TextureUniformVariableName);
-            if (textureLocation == -1)
+            float[] transX = { -20,  20, 9.5f};
+            float[] transY = { -20,  -20, -16};
+            float[] transZ = {  12, -10, -20};
+            float[] rotAngle = { (float)(Math.PI) / 2, (float)(-Math.PI / 2), (float)(Math.PI) };
+            float[] scale = { 12, 12, 10 };
+
+            for (int i = 0; i < 3; i++)
             {
-                throw new Exception($"{TextureUniformVariableName} uniform not found on shader.");
+                var translationForPlayer = Matrix4X4.CreateTranslation(new Vector3D<float>(transX[i], transY[i], transZ[i]));
+                var rotY = Matrix4X4.CreateRotationY(rotAngle[i]);
+                Matrix4X4<float> modelMatrix = Matrix4X4.CreateScale(scale[i]);
+                SetModelMatrix(modelMatrix * rotY * translationForPlayer);
+
+                Gl.BindVertexArray(wall.Vao);
+
+                // textura letrehozasa
+                int textureLocation = Gl.GetUniformLocation(program, TextureUniformVariableName);
+                if (textureLocation == -1)
+                {
+                    throw new Exception($"{TextureUniformVariableName} uniform not found on shader.");
+                }
+                // set texture 0
+                Gl.Uniform1(textureLocation, 1);
+
+                //a skybox valtozoba betoltjuk a texturat
+                //taxtura aktivalas utan mindent az adott texturaval vegzunk
+                Gl.ActiveTexture(TextureUnit.Texture1);
+                Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (float)GLEnum.Linear);
+                Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (float)GLEnum.Linear);
+                Gl.BindTexture(TextureTarget.Texture2D, wall.Texture.Value);
+
+                Gl.DrawElements(GLEnum.Triangles, wall.IndexArrayLength, GLEnum.UnsignedInt, null);
+                Gl.BindVertexArray(0);
+
+                CheckError();
+                Gl.BindTexture(TextureTarget.Texture2D, 0);
+                CheckError();
             }
-            // set texture 0
-            Gl.Uniform1(textureLocation, 1);
-
-            //a skybox valtozoba betoltjuk a texturat
-            //taxtura aktivalas utan mindent az adott texturaval vegzunk
-            Gl.ActiveTexture(TextureUnit.Texture1);
-            Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (float)GLEnum.Linear);
-            Gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (float)GLEnum.Linear);
-            Gl.BindTexture(TextureTarget.Texture2D, wall.Texture.Value);
-
-            Gl.DrawElements(GLEnum.Triangles, wall.IndexArrayLength, GLEnum.UnsignedInt, null);
-            Gl.BindVertexArray(0);
-
-            CheckError();
-            Gl.BindTexture(TextureTarget.Texture2D, 0);
-            CheckError();
         }
 
         private static unsafe void DrawSkyBox()
@@ -586,14 +597,20 @@ namespace Projekt
             if (keyboard.IsKeyPressed(Key.J))
             {
                 ball.rotationMatrix *= Matrix4X4.CreateRotationZ((float)(Math.PI / 25));
-                ball.position += new Vector3D<float>(-0.3f, 0, 0);
-                cameraDescriptor.updatePositionKoveto(new Vector3D<float>(-0.3f, 0, 0));
+                if (ball.position.X > -19)
+                {
+                    ball.position += new Vector3D<float>(-0.3f, 0, 0);
+                    cameraDescriptor.updatePositionKoveto(new Vector3D<float>(-0.3f, 0, 0));
+                }
             }
             if (keyboard.IsKeyPressed(Key.L))
             {
                 ball.rotationMatrix *= Matrix4X4.CreateRotationZ((float)(-Math.PI / 25));
-                ball.position += new Vector3D<float>(0.3f, 0, 0);
-                cameraDescriptor.updatePositionKoveto(new Vector3D<float>(0.3f, 0, 0));
+                if ((ball.position.X < 19))
+                {
+                    ball.position += new Vector3D<float>(0.3f, 0, 0);
+                    cameraDescriptor.updatePositionKoveto(new Vector3D<float>(0.3f, 0, 0));
+                }
             }
         }
 

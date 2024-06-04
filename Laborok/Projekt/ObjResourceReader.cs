@@ -28,7 +28,7 @@ namespace Projekt
             List<float> glColors = new List<float>();
             List<uint> glIndices = new List<uint>();
 
-            CreateGlArraysFromObjArraysNormals(faceColor, objVertices, objFaces, glVertices, glColors, glIndices, objNormals, objFacesNormal, objFacesTexture, objTexture);
+            CreateGlArraysFromObjArraysNormals(faceColor, objVertices, objFaces, glVertices, glColors, glIndices, objNormals, objFacesNormal, objFacesTexture, objTexture, false);
 
             return CreateOpenGlObject(Gl, vao, glVertices, glColors, glIndices, false);
         }
@@ -53,7 +53,7 @@ namespace Projekt
             List<float> glColors = new List<float>();
             List<uint> glIndices = new List<uint>();
 
-            CreateGlArraysFromObjArraysNormals(faceColor, objVertices, objFaces, glVertices, glColors, glIndices, objNormals, objFacesNormal, objFacesTexture, objTexture);
+            CreateGlArraysFromObjArraysNormals(faceColor, objVertices, objFaces, glVertices, glColors, glIndices, objNormals, objFacesNormal, objFacesTexture, objTexture, true);
 
             return CreateOpenGlObject(Gl, vao, glVertices, glColors, glIndices, true);
         }
@@ -78,7 +78,7 @@ namespace Projekt
             List<float> glColors = new List<float>();
             List<uint> glIndices = new List<uint>();
 
-            CreateGlArraysFromObjArraysNormals(faceColor, objVertices, objFaces, glVertices, glColors, glIndices, objNormals, objFacesNormal, objFacesTexture, objTexture);
+            CreateGlArraysFromObjArraysNormals(faceColor, objVertices, objFaces, glVertices, glColors, glIndices, objNormals, objFacesNormal, objFacesTexture, objTexture, false);
 
             return CreateOpenGlObject(Gl, vao, glVertices, glColors, glIndices, false);
         }
@@ -170,7 +170,7 @@ namespace Projekt
             }
         }
 
-        private static unsafe void CreateGlArraysFromObjArraysNormals(float[] faceColor, List<float[]> objVertices, List<int[]> objFaces, List<float> glVertices, List<float> glColors, List<uint> glIndices, List<float[]> objNormals, List<int[]> objFacesNormal, List<int[]> objFacesTexture, List<float[]> objTexture)
+        private static unsafe void CreateGlArraysFromObjArraysNormals(float[] faceColor, List<float[]> objVertices, List<int[]> objFaces, List<float> glVertices, List<float> glColors, List<uint> glIndices, List<float[]> objNormals, List<int[]> objFacesNormal, List<int[]> objFacesTexture, List<float[]> objTexture, bool textura)
         {
             Dictionary<string, int> glVertexIndices = new Dictionary<string, int>();
 
@@ -187,12 +187,17 @@ namespace Projekt
                     var objVertex = objVertices[objFace[i] - 1];
                     //es a hozza tartozo normalis
                     var objNormal = objNormals[objFacesNormal[j][i] - 1];
-                    //var objT = objTexture[objFacesTexture[j][i] - 1];
+                    var objT = objTexture[objFacesTexture[j][i] - 1];
 
                     // create gl description of vertex
                     List<float> glVertex = new List<float>();
                     glVertex.AddRange(objVertex);
                     glVertex.AddRange(objNormal);
+                    if (textura)
+                    {
+                        glVertex.AddRange(objT);
+                    }
+
 
                     // check if vertex exists
                     var glVertexStringKey = string.Join(" ", glVertex);
@@ -311,6 +316,18 @@ namespace Projekt
                                 float[] texture = new float[3];
                                 for (int i = 0; i < texture.Length; ++i)
                                     texture[i] = float.Parse(lineData[i], CultureInfo.InvariantCulture);
+                                objTexture.Add(texture);
+                            }
+                            else
+                            {
+                                float[] texture = new float[2];
+                                for (int i = 0; i < texture.Length; ++i)
+                                {
+                                    if (i == 1) 
+                                    {
+                                        texture[i] = 1 - float.Parse(lineData[i], CultureInfo.InvariantCulture);
+                                    } else { texture[i] = float.Parse(lineData[i], CultureInfo.InvariantCulture); }
+                                }
                                 objTexture.Add(texture);
                             }
                             break;
